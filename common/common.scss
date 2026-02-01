@@ -51,9 +51,16 @@ input[type="color"]:focus,
 }
 
 // Logo + Welcome Box
-.custom-welcome-banner {
-  background: green;
+#custom-welcome-banner {
+  background: rgb(128, 47, 0);
   color: white;
   text-align: center;
-  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1088px;
+}
+
+.inner-logo-area {
+  margin-top: 30px;
+  padding: 3em 3em 5%;
 }
