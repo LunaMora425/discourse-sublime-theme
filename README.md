@@ -1,30 +1,10 @@
-# :cherry_blossom: Sublime theme
+# Welcome to the Internet - a fork of Discourse's Sublime Theme
 
-A sublime theme for Discourse.
+We're attempting to modify an existing theme in order to learn how it's done.
 
 ## Features
 
 A simple and sublime theme for Discourse that is designed from scratch to integrate well with the sidebar.
-
-### Light mode
-
-**Categories page:**
-
-![categories page light mode](images/categories-page-light.webp)
-
-**Latest page:**
-
-![latest page light mode](screenshots/light.webp)
-
-### Dark mode
-
-**Categories page:**
-
-![categories page dark mode](images/categories-page-dark.webp)
-
-**Latest page:**
-
-![latest page dark mode](screenshots/dark.webp)
 
 ---
 
