@@ -49,3 +49,11 @@ input[type="color"]:focus,
 .nav-pills > li a.active::after {
   display: none;
 }
+
+// Logo + Welcome Box
+.custom-welcome-banner {
+  background: green;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
