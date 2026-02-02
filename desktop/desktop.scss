@@ -20,3 +20,9 @@ body.has-full-page-chat {
 .has-full-page-chat:not(.discourse-sidebar) .full-page-chat .channels-list {
   padding-bottom: unset !important;
 }
+
+// Main Container
+body:not(.has-full-page-chat) #main-outlet {
+  box-sizing: border-box;
+  width: 100%;
+}
