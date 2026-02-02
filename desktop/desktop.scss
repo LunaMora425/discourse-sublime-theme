@@ -15,9 +15,8 @@ body.has-full-page-chat {
     height: calc(100vh - var(--header-offset, 60px)) !important;
     overflow: hidden !important;
   }
+}
 
-  .full-page-chat {
-    margin-top: 16px !important;
-    max-height: 100% !important;
-  }
+.has-full-page-chat:not(.discourse-sidebar) .full-page-chat .channels-list {
+  padding-bottom: unset !important;
 }

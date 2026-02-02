@@ -54,6 +54,19 @@ input[type="color"]:focus,
 #custom-welcome-banner {
   box-sizing: border-box;
   width: 100%;
+
+  @media screen and (width <= 700px) {
+    padding: 1.5em;
+    margin-top: 0;
+  }
+
+  @media screen and (width <= 1120px) {
+    width: 90%;
+  }
+
+  @media screen and (width <= 1075px) {
+    width: 95%;
+  }
 }
 
 body.has-full-page-chat #custom-welcome-banner {
@@ -146,6 +159,8 @@ body.has-sidebar-page {
 body:not(.has-full-page-chat) #main-outlet {
   margin-top: 30px;
   margin-bottom: 50px;
+  margin-left: auto;
+  margin-right: auto;
   border: 2px dotted #01949a;
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
@@ -239,5 +254,27 @@ body:not(.has-full-page-chat) #main-outlet {
 @media (width <= 960px) {
   .category-boxes.with-logos.with-subcategories {
     grid-template-columns: 1fr;
+  }
+}
+
+// iOS Full Page Chat Fixes
+html.ios-device.has-full-page-chat {
+  body {
+    height: 100vh !important;
+    width: 100vw !important;
+  }
+
+  #main-outlet {
+    height: 100% !important;
+    max-height: 100% !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  .full-page-chat {
+    height: 100% !important;
+    max-height: 100% !important;
   }
 }
