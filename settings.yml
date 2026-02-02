@@ -1,0 +1,9 @@
+welcome_logo_light:
+  type: upload
+  default: ""
+  description: "Logo to display in the welcome banner (light mode)"
+
+welcome_logo_dark:
+  type: upload
+  default: ""
+  description: "Logo to display in the welcome banner (dark mode)"

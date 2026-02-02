@@ -1,17 +1,19 @@
 import { apiInitializer } from "discourse/lib/api";
 
 export default apiInitializer((api) => {
-  const currentUser = api.getCurrentUser();
+  const logoDark = settings.welcome_logo_dark;
 
   api.renderInOutlet(
     "below-site-header",
     <template>
       <div id="custom-welcome-banner" class="wrap">
         <div class="inner-logo-area">
-          {{#if currentUser}}
-            Welcome back @{{currentUser.username}}
-          {{else}}
-            Welcome to our community
+          {{#if logoDark}}
+            <img
+              src="{{logoDark}}"
+              alt="Welcome Logo Dark"
+              class="welcome-logo dark-mode-logo"
+            />
           {{/if}}
         </div>
       </div>
