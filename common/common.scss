@@ -1,5 +1,7 @@
 :root {
   --d-sidebar-admin-background: var(--header_background);
+  --topic-list-item-background-color: var(--header_background);
+  --topic-list-item-background-color--visited: var(--primary-very-low);
 }
 
 input[type="text"],
@@ -52,6 +54,10 @@ input[type="color"]:focus,
 
 .nav-pills > li a.active::after {
   display: none;
+}
+
+.d-header {
+  border-bottom: 5px dotted var(--quaternary);
 }
 
 // Logo + Welcome Box
@@ -167,7 +173,7 @@ body:not(.has-full-page-chat) #main-outlet {
   margin-bottom: 50px;
   margin-left: auto;
   margin-right: auto;
-  border: 2px dotted #01949a;
+  border: 5px dotted var(--tertiary);
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
   max-width: 1150px;
@@ -222,9 +228,6 @@ body:not(.has-full-page-chat) #main-outlet {
 // Category Boxes
 .category-boxes {
   display: grid;
-  margin-top: 2em;
-  gap: 1.5em;
-  grid-template-columns: 32% 32% 32%;
   border-radius: var(--sublime-border-radius);
 
   .category-box {
@@ -255,6 +258,64 @@ body:not(.has-full-page-chat) #main-outlet {
     padding-top: 10px;
     color: var(--category-box-font-color);
   }
+}
+
+// Category Boxes with Category Groups component turned on
+.custom-category-group {
+  justify-items: center;
+}
+
+@media screen and (min-width: 800px) {
+  .custom-category-group {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.custom-category-group-toggle {
+  display: flex;
+  align-items: center;
+  padding-top: 0.5em;
+  --s: 1.2em;
+  --d: 0.3em;
+  --c: 0.8em;
+  padding: 0 calc(var(--s) + 0.5em) var(--d);
+  line-height: 1.8;
+  background:
+    conic-gradient(
+        at left var(--s) bottom var(--d),
+        #0000 25%,
+        #0008 0 37.5%,
+        #0004 0
+      )
+      0 / 50% 100% no-repeat,
+    conic-gradient(
+        at right var(--s) bottom var(--d),
+        #0004 62.5%,
+        #0008 0 75%,
+        #0000 0
+      )
+      100% / 50% 100% no-repeat;
+  clip-path: polygon(
+    0 var(--d),
+    var(--s) var(--d),
+    var(--s) 0,
+    calc(100% - var(--s)) 0,
+    calc(100% - var(--s)) var(--d),
+    100% var(--d),
+    calc(100% - var(--c)) calc(50% + var(--d) / 2),
+    100% 100%,
+    calc(100% - var(--s) - var(--d)) 100%,
+    calc(100% - var(--s) - var(--d)) calc(100% - var(--d)),
+    calc(var(--s) + var(--d)) calc(100% - var(--d)),
+    calc(var(--s) + var(--d)) 100%,
+    0 100%,
+    var(--c) calc(50% + var(--d) / 2)
+  );
+  background-color: var(--quaternary);
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  margin: 10px 0 10px;
 }
 
 @media (width <= 960px) {

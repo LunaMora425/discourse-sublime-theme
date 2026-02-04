@@ -8,9 +8,9 @@ $category-hover-shadow-light: 0px 10px 30px 0px rgb(2, 47, 57, 0.1);
 $category-hover-shadow-dark: 0px -1px 40px 0px rgb(134, 134, 134, 0.213);
 
 :root {
-  --sublime-border-radius: 4px;
+  --sublime-border-radius: 10px;
   --bg-gradient: #{dark-light-choose($light-bg-gradient, $dark-bg-gradient)};
-  --category-box-bg: #{dark-light-choose($secondary, #161616)};
+  --category-box-bg: #{dark-light-choose($secondary, $header_background)};
   --category-hover-shadow: #{dark-light-choose(
       $category-hover-shadow-light,
       $category-hover-shadow-dark
