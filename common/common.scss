@@ -61,25 +61,26 @@ input[type="color"]:focus,
 }
 
 // Logo + Welcome Box
-#custom-welcome-banner {
-  box-sizing: border-box;
-  width: 100%;
-
-  @media screen and (width <= 700px) {
-    padding: 1.5em;
-    margin-top: 0;
-  }
-
-  @media screen and (width <= 1120px) {
-    width: 90%;
-  }
-
-  @media screen and (width <= 1075px) {
-    width: 95%;
-  }
+#main-outlet-wrapper {
+  grid-template-areas:
+    "sidebar banner"
+    "sidebar content"
+    "sidebar below-content";
 }
 
-body.has-full-page-chat #custom-welcome-banner {
+#main-outlet-wrapper #main-outlet {
+  justify-self: center;
+}
+
+#custom-welcome-banner {
+  grid-area: banner;
+  box-sizing: border-box;
+  width: 100%;
+  margin: auto;
+}
+
+body.has-full-page-chat #custom-welcome-banner,
+body.admin-interface #custom-welcome-banner {
   display: none;
 }
 
@@ -99,6 +100,35 @@ body.has-full-page-chat #custom-welcome-banner {
 //Main Container
 body #main-outlet {
   background: var(--secondary);
+}
+
+// Main Container
+body:not(.has-full-page-chat) #main-outlet {
+  margin-top: 30px;
+  margin-bottom: 50px;
+  background: var(--secondary);
+  border: 5px dotted var(--tertiary);
+  border-radius: var(--sublime-border-radius);
+  padding: 3em 3em 5%;
+  max-width: 1150px;
+  padding-bottom: 5% !important; // overriding inline style
+
+  @media screen and (width <= 700px) {
+    padding: 1.5em;
+    margin-top: 0;
+  }
+
+  @media screen and (width <= 1120px) {
+    width: 80%;
+  }
+
+  @media screen and (width <= 1075px) {
+    width: 85%;
+  }
+
+  .archetype-regular & {
+    min-height: 500px;
+  }
 }
 
 // Category Boxes with Category Groups component turned on
@@ -184,4 +214,40 @@ body #main-outlet {
 // Inside Category Banner spacing
 .list-controls {
   margin-top: 15px;
+}
+
+// COPIED FROM DESKTOP
+// Category Boxes
+.category-boxes {
+  display: grid;
+  border-radius: var(--sublime-border-radius);
+
+  .category-box {
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+    border: none;
+    border-top: 2px solid;
+    background: var(--category-box-bg);
+    border-radius: var(--sublime-border-radius);
+    box-shadow: 0 3px 6px 0 rgb(2, 47, 57, 0.14);
+
+    .category-box-inner {
+      border: none;
+      padding: 0;
+
+      .category-details {
+        padding: 0.8em 1em 0.2em 1em;
+      }
+    }
+
+    &:hover {
+      box-shadow: var(--category-hover-shadow);
+    }
+  }
+
+  .description {
+    padding-top: 10px;
+    color: var(--category-box-font-color);
+  }
 }

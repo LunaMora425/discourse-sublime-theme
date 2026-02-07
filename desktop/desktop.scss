@@ -51,19 +51,28 @@ body.has-full-page-chat {
   background: linear-gradient(to bottom, transparent, rgb(var(--secondary), 1));
 }
 
-// Gradient Background
-#main-outlet-wrapper::after {
-  content: "";
-  display: block;
-  position: fixed;
-  top: 150px;
-  left: 50%;
-  transform: translate(-50%);
-  width: 100vw;
-  height: 1800px;
-  z-index: -1;
-  background: var(--bg-gradient);
+// Main Container
+body #main-outlet {
+  margin-top: 30px;
+  margin-bottom: 50px;
+  background: var(--secondary);
+  border: 5px dotted var(--tertiary);
+  border-radius: var(--sublime-border-radius);
 }
+
+// // Gradient Background
+// #main-outlet-wrapper::after {
+//   content: "";
+//   display: block;
+//   position: fixed;
+//   top: 150px;
+//   left: 50%;
+//   transform: translate(-50%);
+//   width: 100vw;
+//   height: 1800px;
+//   z-index: -1;
+//   background: var(--bg-gradient);
+// }
 
 // Search Banner
 .custom-search-banner-wrap .search-menu {
@@ -84,35 +93,6 @@ body.has-full-page-chat {
 .display-search-banner {
   #main-outlet {
     padding-top: 2em;
-  }
-}
-
-// Main Container
-body #main-outlet {
-  margin-top: 30px;
-  margin-bottom: 50px;
-  background: var(--secondary);
-  border: 2px dotted #01949a;
-  border-radius: var(--sublime-border-radius);
-  padding: 3em 3em 5%;
-  max-width: 1150px;
-  padding-bottom: 5% !important; // overriding inline style
-
-  @media screen and (width <= 700px) {
-    padding: 1.5em;
-    margin-top: 0;
-  }
-
-  @media screen and (width <= 1120px) {
-    width: 80%;
-  }
-
-  @media screen and (width <= 1075px) {
-    width: 85%;
-  }
-
-  .archetype-regular & {
-    min-height: 500px;
   }
 }
 
@@ -145,41 +125,6 @@ body.has-full-page-chat #main-outlet {
     color: var(--secondary);
     border: 1px solid var(--sublime-border-radius);
     background: #4f8a7c;
-  }
-}
-
-// Category Boxes
-.category-boxes {
-  display: grid;
-  border-radius: var(--sublime-border-radius);
-
-  .category-box {
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-    border: none;
-    border-top: 2px solid;
-    background: var(--category-box-bg);
-    border-radius: var(--sublime-border-radius);
-    box-shadow: 0 3px 6px 0 rgb(2, 47, 57, 0.14);
-
-    .category-box-inner {
-      border: none;
-      padding: 0;
-
-      .category-details {
-        padding: 0.8em 1em 0.2em 1em;
-      }
-    }
-
-    &:hover {
-      box-shadow: var(--category-hover-shadow);
-    }
-  }
-
-  .description {
-    padding-top: 10px;
-    color: var(--category-box-font-color);
   }
 }
 
