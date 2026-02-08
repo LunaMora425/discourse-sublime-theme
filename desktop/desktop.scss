@@ -151,6 +151,13 @@ body.has-sidebar-page {
   height: calc(100vh - var(--main-outlet-offset) - 82px);
 }
 
+.ipados-device.has-full-page-chat:not(.discourse-sidebar)
+  .full-page-chat
+  .channels-list {
+  height: inherit;
+  box-sizing: border-box;
+}
+
 body.has-full-page-chat {
   #main-outlet {
     padding-bottom: 0 !important; // overrides another important

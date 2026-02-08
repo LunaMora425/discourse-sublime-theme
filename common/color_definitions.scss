@@ -20,4 +20,5 @@ $category-hover-shadow-dark: 0px -1px 40px 0px rgb(134, 134, 134, 0.213);
       $primary-med-or-secondary-high,
       #858585
     )};
+  --bg-img: url(#{dark-light-choose("assets/white-diamond-dark.png", "assets/white-diamond.png")});
 }

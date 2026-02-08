@@ -24,5 +24,11 @@
       "header_primary": "dddddd"
     }
   },
+  "assets": {
+    "rye": "assets/Rye-Regular.ttf",
+    "atkinson_hyperlegible": "assets/Atkinson-Hyperlegible-Regular.ttf",
+    "bg_light": "assets/white-diamond-dark.png",
+    "bg_dark": "assets/white-diamond.png"
+  },
   "screenshots": ["screenshots/light.webp", "screenshots/dark.webp"]
 }

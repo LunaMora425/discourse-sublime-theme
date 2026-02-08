@@ -1,7 +1,30 @@
+@font-face {
+  font-family: "Rye", serif;
+  src: url(assets/Rye-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible", sans-serif;
+  src: url(assets/Atkinson-Hyperlegible-Regular.ttf) format("truetype");
+}
+
 :root {
   --d-sidebar-admin-background: var(--header_background);
   --topic-list-item-background-color: var(--header_background);
   // --topic-list-item-background-color--visited: var(--primary-very-low);
+}
+
+#main-outlet-wrapper::after {
+  background: none !important;
+}
+
+html.has-full-page-chat body #main-outlet {
+  padding-bottom: unset !important;
+}
+
+body {
+  background-size: auto;
+  background-image: var(--bg-img);
 }
 
 input[type="text"],
@@ -68,9 +91,9 @@ input[type="color"]:focus,
     "sidebar below-content";
 }
 
-#main-outlet-wrapper #main-outlet {
-  justify-self: center;
-}
+// #main-outlet-wrapper #main-outlet {
+//   justify-self: center;
+// }
 
 #custom-welcome-banner {
   grid-area: banner;
