@@ -1,16 +1,22 @@
 @font-face {
-  font-family: "Rye", serif;
-  src: url(assets/Rye-Regular.ttf) format("truetype");
+  font-family: Rye;
+  src: url($rye) format("truetype");
 }
 
 @font-face {
   font-family: "Atkinson Hyperlegible", sans-serif;
-  src: url(assets/Atkinson-Hyperlegible-Regular.ttf) format("truetype");
+  src: url($atkinson_hyperlegible) format("truetype");
 }
 
 :root {
+  --d-border-radius: var(--sublime-border-radius);
+  // --d-button-default-icon-color: var(--secondary);
+  // --d-button-default-bg-color: var(--tertiary);
+  // --d-button-default-text-color--hover: var(--quaternary);
+  // --d-button-primary-text-color--hover: var(--quaternary);
   --d-sidebar-admin-background: var(--header_background);
   --topic-list-item-background-color: var(--header_background);
+  --heading-font-family: Rye, serif;
   // --topic-list-item-background-color--visited: var(--primary-very-low);
 }
 
@@ -25,6 +31,22 @@ html.has-full-page-chat body #main-outlet {
 body {
   background-size: auto;
   background-image: var(--bg-img);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--header_primary);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  text-shadow: var(--theme__title-boxshadow);
 }
 
 input[type="text"],
@@ -49,6 +71,12 @@ input[type="color"],
 .btn-danger,
 .alert.alert-info {
   border-radius: var(--sublime-border-radius);
+  // text-shadow:
+  //   1px 1px 2px #000,
+  //   -1px -1px 2px #000,
+  //   1px 2px 2px #000,
+  //   1px -1px 2px #000;
+  // color: var(--primary);
 }
 
 input[type="text"]:focus,
@@ -159,6 +187,13 @@ body:not(.has-full-page-chat) #main-outlet {
   justify-items: center;
 }
 
+.custom-category-group-toggle h2 {
+  color: var(--header_primary);
+  text-shadow: var(--theme__title-boxshadow);
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
 @media screen and (min-width: 800px) {
   .custom-category-group {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -210,6 +245,11 @@ body:not(.has-full-page-chat) #main-outlet {
   box-sizing: border-box;
   justify-content: center;
   margin: 10px 0 10px;
+}
+
+// Custom Topic Count override
+.custom-topic-count {
+  padding: 0 1em 0.8em 1em;
 }
 
 // // iOS Full Page Chat Fixes
