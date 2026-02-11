@@ -111,17 +111,9 @@ input[type="color"]:focus,
   border-bottom: 5px dotted var(--quaternary);
 }
 
-// Logo + Welcome Box
-#main-outlet-wrapper {
-  grid-template-areas:
-    "sidebar banner"
-    "sidebar content"
-    "sidebar below-content";
+#main-outlet-wrapper #main-outlet {
+  justify-self: center;
 }
-
-// #main-outlet-wrapper #main-outlet {
-//   justify-self: center;
-// }
 
 #custom-welcome-banner {
   grid-area: banner;
@@ -146,6 +138,15 @@ body.admin-interface #custom-welcome-banner {
   margin: auto;
   display: block;
   object-fit: cover;
+}
+
+@media (max-width: 47.999rem) {
+  #main-outlet-wrapper {
+    grid-template-areas:
+      "banner"
+      "content"
+      "below-content";
+  }
 }
 
 //Main Container
@@ -313,4 +314,13 @@ body:not(.has-full-page-chat) #main-outlet {
     padding-top: 10px;
     color: var(--category-box-font-color);
   }
+}
+
+// Custom Topic Cards Edits
+.topic-card__thumbnail {
+  flex: unset;
+}
+
+.topic-card__thumbnail .main-thumbnail {
+  display: none;
 }

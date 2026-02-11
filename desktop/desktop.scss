@@ -51,6 +51,14 @@ body.has-full-page-chat {
   background: linear-gradient(to bottom, transparent, rgb(var(--secondary), 1));
 }
 
+// Logo + Welcome Box
+#main-outlet-wrapper {
+  grid-template-areas:
+    "sidebar banner"
+    "sidebar content"
+    "sidebar below-content";
+}
+
 // Main Container
 body #main-outlet {
   margin-top: 30px;
@@ -59,20 +67,6 @@ body #main-outlet {
   border: 5px dotted var(--tertiary);
   border-radius: var(--sublime-border-radius);
 }
-
-// // Gradient Background
-// #main-outlet-wrapper::after {
-//   content: "";
-//   display: block;
-//   position: fixed;
-//   top: 150px;
-//   left: 50%;
-//   transform: translate(-50%);
-//   width: 100vw;
-//   height: 1800px;
-//   z-index: -1;
-//   background: var(--bg-gradient);
-// }
 
 // Search Banner
 .custom-search-banner-wrap .search-menu {
@@ -149,6 +143,7 @@ body.has-sidebar-page {
 
 .has-full-page-chat:not(.discourse-sidebar) .full-page-chat .channels-list {
   height: calc(100vh - var(--main-outlet-offset) - 82px);
+  box-sizing: border-box;
 }
 
 .ipados-device.has-full-page-chat:not(.discourse-sidebar)
