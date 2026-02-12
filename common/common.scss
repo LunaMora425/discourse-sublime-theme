@@ -162,6 +162,7 @@ body:not(.has-full-page-chat) #main-outlet {
   border: 5px dotted var(--tertiary);
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
+  width: 100%;
   max-width: 1150px;
   padding-bottom: 5% !important; // overriding inline style
 
