@@ -66,6 +66,8 @@ body #main-outlet {
   background: var(--secondary);
   border: 5px dotted var(--tertiary);
   border-radius: var(--sublime-border-radius);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 // Search Banner
@@ -170,4 +172,20 @@ body:not(.has-sidebar-page).has-full-page-chat {
         1px - var(--chat-header-offset, 0) - var(--composer-height, 0px) - 82px
     );
   }
+}
+
+// Admin Area
+html.admin-area #main-outlet {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// fixing chat window when new topic or reply is open
+.chat-drawer-outlet-container {
+  padding-bottom: 0 !important;
+  right: 10px !important;
+}
+
+body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
+  margin-left: auto !important;
 }

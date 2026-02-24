@@ -17,6 +17,7 @@
   --d-sidebar-admin-background: var(--header_background);
   --topic-list-item-background-color: var(--header_background);
   --heading-font-family: Rye, serif;
+  --topic-list-item-background-color--visited: var(--header_background);
   // --topic-list-item-background-color--visited: var(--primary-very-low);
 }
 
@@ -47,6 +48,7 @@ h6 {
 h1,
 h2 {
   text-shadow: var(--theme__title-boxshadow);
+  overflow: initial !important;
 }
 
 input[type="text"],
@@ -162,7 +164,6 @@ body:not(.has-full-page-chat) #main-outlet {
   border: 5px dotted var(--tertiary);
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
-  width: 100%;
   max-width: 1150px;
   padding-bottom: 5% !important; // overriding inline style
 
@@ -185,9 +186,9 @@ body:not(.has-full-page-chat) #main-outlet {
 }
 
 // Category Boxes with Category Groups component turned on
-.custom-category-group {
-  justify-items: center;
-}
+// .custom-category-group {
+//   justify-items: center;
+// }
 
 .custom-category-group-toggle h2 {
   color: var(--header_primary);
@@ -247,6 +248,10 @@ body:not(.has-full-page-chat) #main-outlet {
   box-sizing: border-box;
   justify-content: center;
   margin: 10px 0 10px;
+
+  .d-icon {
+    color: var(--primary);
+  }
 }
 
 // Custom Topic Count override
@@ -324,4 +329,130 @@ body:not(.has-full-page-chat) #main-outlet {
 
 .topic-card__thumbnail .main-thumbnail {
   display: none;
+}
+
+// Mobile Chat specific fixes
+html.has-full-page-chat.mobile-view #main-outlet {
+  width: 100%;
+}
+
+// Edit Category Page
+div.edit-category .edit-category-title-bar {
+  border-radius: var(--sublime-border-radius);
+}
+
+// File Uploader
+.file-uploader__controls label {
+  text-shadow: var(--theme__title-boxshadow);
+}
+
+.no-image .file-uploader__preview:hover,
+.no-file .file-uploader__preview:hover {
+  background-color: var(--tertiary-very-low);
+  border: 1px dashed var(--primary-low-mid);
+}
+
+// Admin Area
+.admin-config-area-card {
+  background-color: var(--header_background);
+}
+
+// Buttons
+
+.btn,
+.d-modal.json-schema-editor-modal .je-ready button,
+.d-modal.json-schema-editor-modal .je-ready .json-editor-btn-add {
+  border-radius: var(--sublime-border-radius);
+}
+
+.btn-transparent .d-icon,
+.btn-transparent.btn-default .d-icon,
+.btn-transparent.btn-icon .d-icon,
+.btn-transparent.no-text .d-icon,
+.d-modal.json-schema-editor-modal .je-ready button.btn-transparent .d-icon,
+.d-modal.json-schema-editor-modal
+  .je-ready
+  .btn-transparent.json-editor-btn-delete
+  .d-icon,
+.custom-category-group-toggle .d-icon {
+  filter: var(--theme__title-dropshadow);
+}
+
+// Category Title Header
+div[class^="category-title-header"] {
+  border-radius: var(--sublime-border-radius);
+  margin-bottom: 10px;
+}
+
+// Topic Cards
+.topic-card .main-link .topic-card__excerpt-text {
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+// add bulk actions back
+.topic-cards-list .topic-list-header {
+  display: block;
+
+  tr {
+    border-bottom: none;
+  }
+
+  .topic-list-data.posters,
+  .topic-list-data.posts,
+  .topic-list-data.views,
+  .topic-list-data.activity {
+    display: none;
+  }
+
+  .topic-list-data.default > span:not([class]) {
+    display: none; //removes
+  }
+}
+
+.topic-list-body {
+  tr.bulk-selecting.topic-card {
+    gap: 0;
+  }
+}
+
+// Chat color fixes
+// .c-navbar-container {
+//   background: var(--header_background);
+// }
+
+.chat-drawer .chat-drawer-container {
+  background: var(--header_background);
+  border: 1px solid var(--secondary);
+}
+
+.chat-channel-divider {
+  border-bottom: 2px solid var(--secondary);
+}
+
+.chat-drawer-container
+  .channels-list-container
+  .chat-channel-row:not(:last-of-type) {
+  border-bottom: 1px solid var(--secondary);
+}
+
+// More Topics
+.more-topics__container {
+  margin-top: 50px;
+  background: var(--header_background);
+  border-radius: var(--sublime-border-radius);
+  padding-top: 20px;
+}
+
+.more-topics__container .more-topics__list-title,
+.more-topics__container .more-topics__browse-more {
+  padding-left: 0;
+  text-align: center;
+}
+
+.more-topics__container
+  .more-topics__list
+  .topic-list-body
+  .topic-list-item:last-of-type {
+  border-bottom: var(--table-border-width) solid var(--table-border-color);
 }

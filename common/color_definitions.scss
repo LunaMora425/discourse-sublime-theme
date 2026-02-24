@@ -8,15 +8,12 @@ $category-hover-shadow-light: 0px 10px 30px 0px rgb(2, 47, 57, 0.1);
 $category-hover-shadow-dark: 0px -1px 40px 0px rgb(134, 134, 134, 0.213);
 $heading-text-shadow-dark:
   0 -1px 0 #5f1a07,
-  0 1px 5px rgb(95 26 7),
+  0 1px 5px rgb(95, 26, 7),
   0 2px 5px #5f1a07,
   0 3px 5px #5f1a07,
-  0 4px 5px #5f1a07,
-  0 5px 0 #5f1a07,
-  0 6px 0 #5f1a07,
-  0 7px 0px #5f1a07,
-  0 22px 30px rgb(95 26 7 / 90%),
-  2px 2px 2px rgba(206, 89, 55, 0);
+  0 1px 5px #5f1a07;
+$heading-drop-shadow-dark: drop-shadow(-1px 2px 3px #5f1a07a4)
+  drop-shadow(2px 1px 3px #5f1a07a4) drop-shadow(0px -1px 3px #5f1a07a4);
 
 $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
 
@@ -38,4 +35,10 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
       "0 10px 30px 0px rgb(2, 47, 57, 0.1)",
       $heading-text-shadow-dark
     )};
+  --theme__title-dropshadow: #{dark-light-choose(
+      "drop-shadow(-1px 2px 3px #5f1a07) drop-shadow(2px 1px 3px #5f1a07) drop-shadow(0px -1px 3px #5f1a07)",
+      $heading-drop-shadow-dark
+    )};
+  --content-border-color: var(--quaternary-low);
+  --metadata-color: var(--primary);
 }
