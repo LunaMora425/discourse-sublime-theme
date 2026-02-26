@@ -428,6 +428,10 @@ div[class^="category-title-header"] {
 
 .chat-channel-divider {
   border-bottom: 2px solid var(--secondary);
+
+  .channel-title {
+    text-transform: uppercase;
+  }
 }
 
 .chat-drawer-container
@@ -436,13 +440,18 @@ div[class^="category-title-header"] {
   border-bottom: 1px solid var(--secondary);
 }
 
-// More Topics
-.more-topics__container {
-  margin-top: 50px;
-  background: var(--header_background);
-  border-radius: var(--sublime-border-radius);
-  padding-top: 20px;
+.chat-channel.--loaded {
+  --scrollbarThumbBg: var(--tertiary);
+  background: var(--secondary);
 }
+
+// More Topics
+// .more-topics__container {
+//   margin-top: 50px;
+//   background: var(--header_background);
+//   border-radius: var(--sublime-border-radius);
+//   padding-top: 20px;
+// }
 
 .more-topics__container .more-topics__list-title,
 .more-topics__container .more-topics__browse-more {
@@ -455,4 +464,11 @@ div[class^="category-title-header"] {
   .topic-list-body
   .topic-list-item:last-of-type {
   border-bottom: var(--table-border-width) solid var(--table-border-color);
+}
+
+// About Us Page
+section.about__admins,
+.about__stats-item.admins,
+.user-info[data-username="Barbermonger"] {
+  display: none;
 }

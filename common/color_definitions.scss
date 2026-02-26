@@ -41,4 +41,5 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
     )};
   --content-border-color: var(--quaternary-low);
   --metadata-color: var(--primary);
+  --d-hover: var(--header_background);
 }

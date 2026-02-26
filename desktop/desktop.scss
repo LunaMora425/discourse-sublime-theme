@@ -189,3 +189,35 @@ html.admin-area #main-outlet {
 body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
   margin-left: auto !important;
 }
+
+// chat fixes
+.has-full-page-chat {
+  .full-page-chat {
+    border-left: none;
+    border-right: none;
+  }
+
+  .chat-pinned-messages-list.chat-messages-scroller {
+    max-height: 800px;
+  }
+
+  .c-channel-info {
+    box-sizing: border-box;
+    max-height: 800px;
+    overflow-y: scroll;
+    max-width: unset;
+  }
+}
+
+.custom-category-group {
+  // Category repositioning with the Group Categories component
+  li[data-category-id="15"],
+  li[data-category-id="17"],
+  li[data-category-id="32"] {
+    grid-column: 1 / span 2;
+  }
+}
+// remove the category banner image since it doesn't work well with the new category box design
+.category-boxes .category-box .category-box-inner .category-logo {
+  display: none;
+}
