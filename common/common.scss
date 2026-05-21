@@ -4,19 +4,133 @@
 }
 
 @font-face {
-  font-family: "Atkinson Hyperlegible", sans-serif;
+  font-family: Livvic;
+  src: url($livvic) format("truetype");
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible";
   src: url($atkinson_hyperlegible) format("truetype");
 }
 
+@import "topic-cards-converted";
+@import "high-context-cards-converted";
+
+// =====================================================================
+//  Barbermonger - theme overrides
+//  Companion to the "Barbermonger Dark" colour scheme in about.json.
+// ---------------------------------------------------------------------
+//  The colour work now lives almost entirely in about.json. Because that
+//  file PINS the derived tints (the full primary ramp, the secondary
+//  tints, and the muted-text blends) to flat navy / flat dun values, it
+//  sets the SCSS source variables directly - so it fixes BOTH the baked
+//  styles and the var(--*) styles in one place. No tint chasing, no DOM
+//  walking.
+//
+//  This file is therefore reserved for the only two things a colour
+//  palette CANNOT express:
+//    1. Role reassignments  - making an element use a different role
+//                             than Discourse assigns it.
+//    2. Decorative tokens   - colours with no Discourse slot at all.
+// =====================================================================
+
+:root {
+  // --- Decorative text-shadow colours (no palette slot) ----------------
+  // JCink used these as glows under accent text. Apply them in custom
+  // rules via text-shadow where you want the effect.
+  --color-quaternary-shadow: #5f1a07; // blood-red
+  --color-secondary-shadow: #053663; // berkeley-blue
+}
+
+// --- Role reassignment: make link-like elements verdigris ------------
+// Discourse deliberately renders many clickable things in the TEXT colour
+// (primary), not the link colour. Reversing that is the one area the
+// palette can't reach - but it's a small, known set, not a DOM walk.
+// If any selector below misses (Discourse markup shifts between versions),
+// inspect the element, find the rule actually setting `color`, and send it
+// to me - that's how we nailed the category badges.
+
+// Category badges (titles + subcategory links).
+// The name uses `--category-badge-title-color: currentcolor`, so it
+// inherits from `.badge-category` (core sets that to --primary-high).
+// Recolour the badge and the name follows. NOTE: categories that have a
+// custom text colour set in their category settings will keep that colour.
+.badge-category__wrapper .badge-category {
+  color: var(--tertiary);
+}
+
+// Usernames + mentions (they link to profiles).
+// Core colours these via `.names > span a` -> --primary-high-or-secondary-low
+// (a blend; pinning secondary-low in about.json does NOT reach it, so we
+// target the selector directly). Add `!important` if a group/staff flair
+// colour outranks this on certain users.
+.names > span a,
+a.username,
+a.mention,
+.chat-message-info__username__name {
+  color: var(--tertiary);
+}
+
+// Flat / text buttons - post controls (reply, edit, link, share) and
+// topic footer. Targets icon + label. Trim if you want some left muted.
+.post-controls .btn-flat,
+.post-controls .btn-flat .d-icon,
+.topic-footer-buttons .btn-flat,
+.topic-footer-buttons .btn-flat .d-icon,
+.btn-flat .d-icon,
+.small-action .topic-avatar .d-icon {
+  color: var(--tertiary);
+}
+
+// Topic-list titles
+.topic-list-item .title,
+.latest-topic-list-item .title,
+.featured-topic a.title {
+  color: var(--tertiary);
+}
+
+// Any spare text that should be primary
+.chat-message-separator-date .chat-message-separator__text {
+  color: var(--primary);
+}
+
+// --- OPTIONAL: two-tone surfaces (JCink page vs box) -----------------
+// JCink had two independent background colours; Discourse has one
+// `secondary` + derived tints. If you want category boxes raised to the
+// space-cadet contrast tone like JCink, uncomment and confirm the
+// winning selector for your category style via DevTools.
+//
+// .category-boxes .category-box,
+// .category-list-item {
+//   background: #1d1e38; // space-cadet
+// }
+
+// =====================================================================
+//  REFERENCE - the logic for pinning, so you can pin any straggler
+//  yourself. Inspect an element, read the winning var(--x):
+//    * a SLOT (primary/secondary/tertiary/...) -> change it in about.json
+//    * a TINT (-low/-medium/-high, the numbered ramp, *-or-secondary-*)
+//      -> PIN it in about.json (it has a !default, so your value wins,
+//         and it reaches baked + var usages together)
+//    * a COMPONENT alias -> it points at a slot/tint; pin that instead
+//    * a ROLE you want changed (title=link) -> a rule here, like above
+//
+//  Find every variable + its resolved value (run in the JS console):
+//    const r = getComputedStyle(document.documentElement);
+//    [...document.styleSheets]
+//      .flatMap(s => { try { return [...s.cssRules] } catch { return [] } })
+//      .filter(x => x.selectorText && x.selectorText.includes(':root'))
+//      .flatMap(x => [...x.style].filter(p => p.startsWith('--')))
+//      .filter((v,i,a) => a.indexOf(v) === i).sort()
+//      .forEach(v => console.log(v, r.getPropertyValue(v).trim()));
+// =====================================================================
+
 :root {
   --d-border-radius: var(--sublime-border-radius);
-  // --d-button-default-icon-color: var(--secondary);
-  // --d-button-default-bg-color: var(--tertiary);
-  // --d-button-default-text-color--hover: var(--quaternary);
-  // --d-button-primary-text-color--hover: var(--quaternary);
   --d-sidebar-admin-background: var(--header_background);
   --topic-list-item-background-color: var(--header_background);
-  --heading-font-family: Rye, serif;
+  --heading-font-family: "Livvic", sans-serif;
+  --font-family: "Atkinson Hyperlegible", NotoSans, Arial, sans-serif;
   --topic-list-item-background-color--visited: var(--header_background);
   // --topic-list-item-background-color--visited: var(--primary-very-low);
 }
@@ -47,6 +161,7 @@ h6 {
 
 h1,
 h2 {
+  font-family: Rye, serif;
   text-shadow: var(--theme__title-boxshadow);
   overflow: initial !important;
 }
@@ -183,80 +298,6 @@ body:not(.has-full-page-chat) #main-outlet {
   .archetype-regular & {
     min-height: 500px;
   }
-}
-
-// Category Boxes with Category Groups component turned on
-// .custom-category-group {
-//   justify-items: center;
-// }
-
-.custom-category-group-toggle h2 {
-  color: var(--header_primary);
-  text-shadow: var(--theme__title-boxshadow);
-  font-weight: 400;
-  text-transform: uppercase;
-}
-
-@media screen and (min-width: 800px) {
-  .custom-category-group {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-.custom-category-group-toggle {
-  display: flex;
-  align-items: center;
-  padding-top: 0.5em;
-  --s: 1.2em;
-  --d: 0.3em;
-  --c: 0.8em;
-  padding: 0 calc(var(--s) + 0.5em) var(--d);
-  line-height: 1.8;
-  background:
-    conic-gradient(
-        at left var(--s) bottom var(--d),
-        #0000 25%,
-        #0008 0 37.5%,
-        #0004 0
-      )
-      0 / 50% 100% no-repeat,
-    conic-gradient(
-        at right var(--s) bottom var(--d),
-        #0004 62.5%,
-        #0008 0 75%,
-        #0000 0
-      )
-      100% / 50% 100% no-repeat;
-  clip-path: polygon(
-    0 var(--d),
-    var(--s) var(--d),
-    var(--s) 0,
-    calc(100% - var(--s)) 0,
-    calc(100% - var(--s)) var(--d),
-    100% var(--d),
-    calc(100% - var(--c)) calc(50% + var(--d) / 2),
-    100% 100%,
-    calc(100% - var(--s) - var(--d)) 100%,
-    calc(100% - var(--s) - var(--d)) calc(100% - var(--d)),
-    calc(var(--s) + var(--d)) calc(100% - var(--d)),
-    calc(var(--s) + var(--d)) 100%,
-    0 100%,
-    var(--c) calc(50% + var(--d) / 2)
-  );
-  background-color: var(--quaternary);
-  width: 100%;
-  box-sizing: border-box;
-  justify-content: center;
-  margin: 10px 0 10px;
-
-  .d-icon {
-    color: var(--primary);
-  }
-}
-
-// Custom Topic Count override
-.custom-topic-count {
-  padding: 0 1em 0.8em 1em;
 }
 
 // // iOS Full Page Chat Fixes
@@ -445,6 +486,17 @@ div[class^="category-title-header"] {
   background: var(--secondary);
 }
 
+.chat-message .chat-message-reaction.reacted,
+.chat-message-actions .chat-message-reaction.reacted {
+  background: unset;
+}
+
+.locale-dates-previews {
+  max-width: 250px;
+  overflow-y: scroll;
+  max-height: 500px;
+}
+
 // More Topics
 // .more-topics__container {
 //   margin-top: 50px;
@@ -471,4 +523,35 @@ section.about__admins,
 .about__stats-item.admins,
 .user-info[data-username="Barbermonger"] {
   display: none;
+}
+
+// Emoji fixes
+img.emoji {
+  height: 1.4em;
+  width: 1.4em;
+}
+
+img.emoji.only-emoji {
+  width: 50px;
+  height: 50px;
+}
+
+.chat-channel-icon {
+  img.emoji {
+    height: 1em;
+    width: 1em;
+  }
+}
+
+// select kit fixes
+.schema-setting-editor
+  .schema-field
+  .schema-field__input
+  .select-kit.multi-select {
+  width: 300px;
+}
+
+// PM fixes
+.archetype-private_message .current-user-post .regular.contents {
+  background: unset;
 }

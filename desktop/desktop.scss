@@ -201,18 +201,23 @@ body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
     max-height: 800px;
   }
 
-  .c-channel-info {
+  .c-channel-info,
+  .chat-browse-view {
     box-sizing: border-box;
-    max-height: 800px;
+    max-height: 80vh;
     overflow-y: scroll;
     max-width: unset;
   }
 }
 
+.custom-category-group-search .custom-category-group {
+  grid-template-columns: 1fr;
+}
+
 .custom-category-group {
   // Category repositioning with the Group Categories component
   li[data-category-id="15"],
-  li[data-category-id="17"],
+  // li[data-category-id="17"],
   li[data-category-id="32"] {
     grid-column: 1 / span 2;
   }
