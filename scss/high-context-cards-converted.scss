@@ -19,7 +19,7 @@
 
 .topic-list-item.--high-context {
   display: block;
-  background: var(--secondary);
+  background: var(--header_background);
   padding: 0;
 
   &.closed {
@@ -40,12 +40,12 @@
   }
 
   @media screen and (min-width: 767px) {
-    border: 1px solid var(--primary-low);
+    border: 2px dotted var(--color-secondary-shadow);
     border-radius: var(--d-border-radius-large);
   }
 
   @media screen and (max-width: 766px) {
-    border-bottom: 1px solid var(--primary-low);
+    border-bottom: 2px dotted var(--color-secondary-shadow);
   }
 
   &.selected {
@@ -189,13 +189,15 @@
 
   &__title {
     font-weight: 700;
-    font-size: var(--font-up-1-rem);
+    font-size: var(--font-up-1);
+    font-family: var(--heading-font-family), sans-serif;
     color: var(--primary);
     text-decoration: none;
     line-height: 1.3;
+    text-transform: uppercase;
 
     a {
-      color: var(--primary);
+      color: var(--tertiary) !important;
       word-break: break-word;
 
       > * {
@@ -277,7 +279,7 @@
     gap: var(--space-3);
 
     @media screen and (min-width: 767px) {
-      border-top: 1px solid var(--primary-low);
+      border-top: 1px solid var(--color-secondary-shadow);
       padding-top: var(--space-3);
     }
 

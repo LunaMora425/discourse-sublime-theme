@@ -425,32 +425,6 @@ div[class^="category-title-header"] {
   margin-bottom: 10px;
 }
 
-// Topic Cards
-.topic-card .main-link .topic-card__excerpt-text {
-  padding-bottom: 4px;
-  margin-bottom: 4px;
-}
-
-// add bulk actions back
-.topic-cards-list .topic-list-header {
-  display: block;
-
-  tr {
-    border-bottom: none;
-  }
-
-  .topic-list-data.posters,
-  .topic-list-data.posts,
-  .topic-list-data.views,
-  .topic-list-data.activity {
-    display: none;
-  }
-
-  .topic-list-data.default > span:not([class]) {
-    display: none; //removes
-  }
-}
-
 .topic-list-body {
   tr.bulk-selecting.topic-card {
     gap: 0;
