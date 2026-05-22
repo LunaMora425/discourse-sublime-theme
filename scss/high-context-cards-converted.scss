@@ -45,7 +45,9 @@
   }
 
   @media screen and (max-width: 766px) {
-    border-bottom: 2px dotted var(--color-secondary-shadow);
+    border: 2px dotted var(--color-secondary-shadow);
+    border-radius: var(--sublime-border-radius);
+    margin: 3px 0;
   }
 
   &.selected {
@@ -221,6 +223,7 @@
       line-height: 1.25;
       display: -webkit-box;
       -webkit-line-clamp: 2;
+      line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
       font-size: var(--font-0);
@@ -331,7 +334,7 @@
   }
 
   &__replies,
-  &__likes,
+  &__views,
   &__votes {
     display: inline-flex;
     align-items: center;

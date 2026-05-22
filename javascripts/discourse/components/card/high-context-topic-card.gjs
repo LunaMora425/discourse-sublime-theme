@@ -6,7 +6,6 @@ import { themePrefix } from "virtual:theme";
 import BulkSelectCheckbox from "discourse/components/topic-list/bulk-select-checkbox";
 import TopicExcerpt from "discourse/components/topic-list/topic-excerpt";
 import TopicLink from "discourse/components/topic-list/topic-link";
-import UnreadIndicator from "discourse/components/topic-list/unread-indicator";
 import TopicPostBadges from "discourse/components/topic-post-badges";
 import TopicStatus from "discourse/components/topic-status";
 import topicFeaturedLink from "discourse/helpers/topic-featured-link";
@@ -73,8 +72,12 @@ export default class HighContextTopicCard extends Component {
     return this.args.topic.replyCount > 0;
   }
 
-  get hasLikes() {
-    return this.args.topic.like_count > 0;
+  get hasViews() {
+    return this.args.topic.views > 0;
+  }
+
+  get hasUnread() {
+    return this.args.topic.unseen || (this.args.topic.unread_posts ?? 0) > 0;
   }
 
   get replyCountLabel() {
@@ -83,9 +86,9 @@ export default class HighContextTopicCard extends Component {
     });
   }
 
-  get likeCountLabel() {
-    return i18n(themePrefix("like_count"), {
-      count: this.args.topic.like_count,
+  get viewCountLabel() {
+    return i18n(themePrefix("views"), {
+      count: this.args.topic.views,
     });
   }
 
@@ -181,6 +184,18 @@ export default class HighContextTopicCard extends Component {
               {{/if}}
             </span>
           {{/if}}
+
+          {{#if this.hasUnread}}
+            <span
+              class="hc-topic-card__status --unread"
+              title="New posts since your last visit"
+            >
+              {{dIcon "burst"}}
+              {{#if this.capabilities.viewport.sm}}
+                <span class="hc-topic-card__status-text">new!</span>
+              {{/if}}
+            </span>
+          {{/if}}
         </div>
       </div>
 
@@ -196,7 +211,6 @@ export default class HighContextTopicCard extends Component {
           {{~#if @topic.featured_link~}}
             &nbsp;{{topicFeaturedLink @topic}}
           {{~/if~}}
-          <UnreadIndicator @topic={{@topic}} />
           <TopicPostBadges
             @unreadPosts={{@topic.unread_posts}}
             @unseen={{@topic.unseen}}
@@ -297,16 +311,14 @@ export default class HighContextTopicCard extends Component {
             </span>
           {{/if}}
 
-          {{#if this.hasLikes}}
+          {{#if this.hasViews}}
             <span
-              class="hc-topic-card__likes"
-              aria-label={{this.likeCountLabel}}
-              title={{this.likeCountLabel}}
+              class="hc-topic-card__views"
+              aria-label={{this.viewCountLabel}}
+              title={{this.viewCountLabel}}
             >
-              {{dIcon "heart" skipTitle=true}}
-              <span class="hc-topic-card__count">{{dNumber
-                  @topic.like_count
-                }}</span>
+              {{dIcon "eye" skipTitle=true}}
+              <span class="hc-topic-card__count">{{dNumber @topic.views}}</span>
             </span>
           {{/if}}
         </div>

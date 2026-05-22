@@ -363,15 +363,6 @@ body:not(.has-full-page-chat) #main-outlet {
   }
 }
 
-// Custom Topic Cards Edits
-.topic-card__thumbnail {
-  flex: unset;
-}
-
-.topic-card__thumbnail .main-thumbnail {
-  display: none;
-}
-
 // Mobile Chat specific fixes
 html.has-full-page-chat.mobile-view #main-outlet {
   width: 100%;
