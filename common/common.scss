@@ -39,7 +39,8 @@
   // JCink used these as glows under accent text. Apply them in custom
   // rules via text-shadow where you want the effect.
   --color-quaternary-shadow: #5f1a07; // blood-red
-  --color-secondary-shadow: #053663; // berkeley-blue
+  --color-tertiary-shadow: #053663; // berkeley-blue
+  --content-border-color: var(--color-tertiary-shadow);
 }
 
 // --- Role reassignment: make link-like elements verdigris ------------
@@ -519,4 +520,10 @@ img.emoji.only-emoji {
 // PM fixes
 .archetype-private_message .current-user-post .regular.contents {
   background: unset;
+}
+
+// unread indicator color
+.badge-notification.new-topic::before,
+.badge-notification.new-replies::before {
+  background: var(--quaternary);
 }
