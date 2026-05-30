@@ -1,17 +1,3 @@
 en:
-  solved: "Solved"
-  unsolved: "Unsolved"
-  posted: "posted"
-  by_username: "by @%{username}"
-  replied: "replied"
-  vote_count:
-    one: "%{count} vote"
-    other: "%{count} votes"
-  views:
-    one: "%{count} view"
-    other: "%{count} views"
-  reply_count:
-    one: "%{count} reply"
-    other: "%{count} replies"
   theme_metadata:
     description: "A theme for Barbermonger, built using a fork of the Sublime discourse theme."
