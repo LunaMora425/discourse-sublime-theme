@@ -15,7 +15,7 @@ $heading-text-shadow-dark:
 $heading-drop-shadow-dark: drop-shadow(-1px 2px 3px #5f1a07a4)
   drop-shadow(2px 1px 3px #5f1a07a4) drop-shadow(0px -1px 3px #5f1a07a4);
 
-$bg-img: #{dark-light-choose($bg_dark, $bg_dark)};
+$bg-img: #{dark-light-choose($bg_dark, $bg_light)};
 
 :root {
   --sublime-border-radius: 10px;
@@ -35,12 +35,53 @@ $bg-img: #{dark-light-choose($bg_dark, $bg_dark)};
       "0 10px 30px 0px rgb(2, 47, 57, 0.1)",
       $heading-text-shadow-dark
     )};
+  // Drop shadow pops light icons/titles off dark surfaces; on light palettes
+  // it reads as smudge, so it's disabled there.
   --theme__title-dropshadow: #{dark-light-choose(
-      "drop-shadow(-1px 2px 3px #5f1a07) drop-shadow(2px 1px 3px #5f1a07) drop-shadow(0px -1px 3px #5f1a07)",
+      none,
       $heading-drop-shadow-dark
     )};
   // --content-border-color: var(--quaternary-low);
   // --metadata-color: var(--primary);
   // --d-hover: var(--header_background);
   --title-color--read: var(--tertiary);
+
+  // ---------------------------------------------------------------------------
+  // Barbermonger semantic layer.
+  // Slot contract: tertiary = cool accent family, quaternary = warm accent
+  // family, in EVERY palette (light or dark). Component CSS must use these
+  // vars for surfaces/furniture instead of borrowing header_background.
+  // ---------------------------------------------------------------------------
+
+  // Card/panel surface (topic rows, category cards, admin cards, chat drawer).
+  // FLIP TRIAL (2026-07-04): page (secondary) is now the deeper cream
+  // #efddc0; cards sit one step lighter (≈ #f4e7d3 on clown-light) — the
+  // same step direction dark mode uses (page 121325 → cards 1d1e38).
+  --bm-surface-2: #{dark-light-choose(
+      mix(#fff, $secondary, 30%),
+      $header_background
+    )};
+
+  // Ribbons + brand-colored pills are mode-invariant brand furniture:
+  // always brand orange with cream lettering and a dark outline.
+  --bm-ribbon-bg: #ec5d37;
+  --bm-ribbon-text: #d4be9f;
+  --bm-ribbon-shadow: #{$heading-text-shadow-dark};
+
+  // Display headings (Rye) in topic/post view: brick carnival-poster ink on
+  // light palettes; dark palettes keep the palette ink (cream on clown-dark).
+  --bm-heading-ink: #{dark-light-choose(#a53817, $primary)};
+
+  // Outline text-shadow for pills that sit on palette surfaces:
+  // needed for pop on dark palettes, smudgy on light ones.
+  --bm-text-outline: #{dark-light-choose(
+      none,
+      "1px 1px 2px #000, -1px -1px 2px #000, 1px 2px 2px #000, 1px -1px 2px #000"
+    )};
+
+  // Same idea for SVG icons, which ignore text-shadow and need filter instead.
+  --bm-icon-outline: #{dark-light-choose(
+      none,
+      "drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)"
+    )};
 }

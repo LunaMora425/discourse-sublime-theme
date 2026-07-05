@@ -125,11 +125,11 @@ a.mention,
 
 :root {
   --d-border-radius: var(--sublime-border-radius);
-  --d-sidebar-admin-background: var(--header_background);
-  --topic-list-item-background-color: var(--header_background);
+  --d-sidebar-admin-background: var(--bm-surface-2);
+  --topic-list-item-background-color: var(--bm-surface-2);
   --heading-font-family: "Livvic", sans-serif;
   --font-family: "Atkinson Hyperlegible", NotoSans, Arial, sans-serif;
-  --topic-list-item-background-color--visited: var(--header_background);
+  --topic-list-item-background-color--visited: var(--bm-surface-2);
   // --topic-list-item-background-color--visited: var(--primary-very-low);
 }
 
@@ -224,6 +224,24 @@ input[type="color"]:focus,
 
 .d-header {
   border-bottom: 5px dotted var(--quaternary);
+}
+
+// Header icons follow header_primary — the one slot guaranteed by the
+// palette contract to contrast with header_background in every palette.
+.d-header .d-header-icons .d-icon {
+  color: var(--header_primary);
+}
+
+// Display headings in topic/post view take the heading ink
+// (brick on light palettes, palette ink on dark — see color_definitions).
+#topic-title h1,
+#topic-title h1 a,
+.fancy-title,
+.cooked h1,
+.cooked h2,
+.cooked h3,
+.cooked h4 {
+  color: var(--bm-heading-ink, var(--primary));
 }
 
 #main-outlet-wrapper #main-outlet {
@@ -384,7 +402,7 @@ div.edit-category .edit-category-title-bar {
 
 // Admin Area
 .admin-config-area-card {
-  background-color: var(--header_background);
+  background-color: var(--bm-surface-2);
 }
 
 // Buttons
@@ -420,13 +438,8 @@ div[class^="category-title-header"] {
   }
 }
 
-// Chat color fixes
-// .c-navbar-container {
-//   background: var(--header_background);
-// }
-
 .chat-drawer .chat-drawer-container {
-  background: var(--header_background);
+  background: var(--bm-surface-2);
   border: 1px solid var(--secondary);
 }
 
@@ -523,4 +536,32 @@ img.emoji.only-emoji {
 .badge-notification.new-topic::before,
 .badge-notification.new-replies::before {
   background: var(--quaternary);
+}
+
+/* Hide likes from user summary/profiles */
+.top-section.most-liked-section {
+  display: none;
+}
+.stats-likes-given,
+.stats-likes-received {
+  display: none;
+}
+.top-section .replies-section,
+.top-section .topics-section {
+  display: none;
+}
+
+/* Hide likes given from user activity navigation */
+.user-nav__activity-likes {
+  display: none;
+}
+
+/* Hide likes received from user notifications navigation */
+.user-nav__notifications-likes {
+  display: none;
+}
+
+/* Hide likes on about page */
+.about__activities-item.likes {
+  display: none;
 }
