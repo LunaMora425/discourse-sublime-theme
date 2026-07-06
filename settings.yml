@@ -7,3 +7,38 @@ welcome_logo_dark:
   type: upload
   default: ""
   description: "Logo to display in the welcome banner (dark mode)"
+
+# Per-theme logo overrides. When empty (the default), the site-setting logos
+# from Admin > Branding are used — so a theme only fills these in when it has
+# its own art. Setting names must stay `<core name>_light` / `<core name>_dark`
+# (core names: logo, logo_small, mobile_logo) — theme-logos.gjs builds the
+# lookup from them.
+logo_light:
+  type: upload
+  default: ""
+  description: "Site logo override for this theme (light mode). Empty = use Admin > Branding logo."
+
+logo_dark:
+  type: upload
+  default: ""
+  description: "Site logo override for this theme (dark mode). Empty = use light override, then Admin > Branding."
+
+logo_small_light:
+  type: upload
+  default: ""
+  description: "Small logo override for this theme (light mode). Empty = use Admin > Branding."
+
+logo_small_dark:
+  type: upload
+  default: ""
+  description: "Small logo override for this theme (dark mode). Empty = use light override, then Admin > Branding."
+
+mobile_logo_light:
+  type: upload
+  default: ""
+  description: "Mobile logo override for this theme (light mode). Empty = use Admin > Branding."
+
+mobile_logo_dark:
+  type: upload
+  default: ""
+  description: "Mobile logo override for this theme (dark mode). Empty = use light override, then Admin > Branding."

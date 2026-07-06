@@ -119,8 +119,14 @@ body.has-full-page-chat #main-outlet {
     border-radius: var(--sublime-border-radius);
     transition: all 0.3s linear;
     color: var(--secondary);
-    border: 1px solid var(--sublime-border-radius);
     background: var(--tertiary);
+
+    // This desktop-only solid bg is var(--tertiary), but core's nav-active
+    // mixin ALSO colors the icon var(--tertiary) — icon vanished into the
+    // bg in both modes (mobile is fine: no bg there). Match the text.
+    .d-icon {
+      color: var(--secondary);
+    }
   }
 }
 

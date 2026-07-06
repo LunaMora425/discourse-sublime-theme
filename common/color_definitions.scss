@@ -14,8 +14,15 @@ $heading-text-shadow-dark:
   0 1px 5px #5f1a07;
 $heading-drop-shadow-dark: drop-shadow(-1px 2px 3px #5f1a07a4)
   drop-shadow(2px 1px 3px #5f1a07a4) drop-shadow(0px -1px 3px #5f1a07a4);
+// Berkeley-blue variant of the layered heading shadow (pairs with teal).
+$heading-text-shadow-berkeley:
+  0 -1px 0 #053663,
+  0 1px 5px rgb(5, 54, 99),
+  0 2px 5px #053663,
+  0 3px 5px #053663,
+  0 1px 5px #053663;
 
-$bg-img: #{dark-light-choose($bg_dark, $bg_light)};
+$bg-img: #{dark-light-choose($bg_light, $bg_dark)};
 
 :root {
   --sublime-border-radius: 10px;
@@ -26,31 +33,25 @@ $bg-img: #{dark-light-choose($bg_dark, $bg_light)};
       $category-hover-shadow-dark
     )};
   --sidebar-highlight: #2b7c85;
-  // --category-box-font-color: #{dark-light-choose(
-  //     $primary-med-or-secondary-high,
-  //     #858585
-  //   )};
   --bg-img: url(#{$bg-img});
   --theme__title-boxshadow: #{dark-light-choose(
       "0 10px 30px 0px rgb(2, 47, 57, 0.1)",
       $heading-text-shadow-dark
     )};
-  // Drop shadow pops light icons/titles off dark surfaces; on light palettes
-  // it reads as smudge, so it's disabled there.
   --theme__title-dropshadow: #{dark-light-choose(
       none,
       $heading-drop-shadow-dark
     )};
-  // --content-border-color: var(--quaternary-low);
-  // --metadata-color: var(--primary);
-  // --d-hover: var(--header_background);
   --title-color--read: var(--tertiary);
 
   // ---------------------------------------------------------------------------
   // Barbermonger semantic layer.
-  // Slot contract: tertiary = cool accent family, quaternary = warm accent
-  // family, in EVERY palette (light or dark). Component CSS must use these
-  // vars for surfaces/furniture instead of borrowing header_background.
+  // Slot contract (revised 2026-07-05, beta vote): tertiary = MAIN accent,
+  // quaternary = SECONDARY accent. Hue family flips per mode: light palettes
+  // run tertiary warm / quaternary cool; dark palettes run tertiary cool /
+  // quaternary warm. Components needing a matching hard shadow use
+  // --bm-accent-shadow rather than assuming a hue. Component CSS must use
+  // these vars for surfaces/furniture instead of borrowing header_background.
   // ---------------------------------------------------------------------------
 
   // Card/panel surface (topic rows, category cards, admin cards, chat drawer).
@@ -64,13 +65,68 @@ $bg-img: #{dark-light-choose($bg_dark, $bg_light)};
 
   // Ribbons + brand-colored pills are mode-invariant brand furniture:
   // always brand orange with cream lettering and a dark outline.
-  --bm-ribbon-bg: #ec5d37;
+  --bm-ribbon-bg: #{$quaternary};
   --bm-ribbon-text: #d4be9f;
   --bm-ribbon-shadow: #{$heading-text-shadow-dark};
 
   // Display headings (Rye) in topic/post view: brick carnival-poster ink on
   // light palettes; dark palettes keep the palette ink (cream on clown-dark).
   --bm-heading-ink: #{dark-light-choose(#a53817, $primary)};
+
+  // Hard shadow/border color that pairs with the CURRENT tertiary hue family
+  // (2026-07-05 beta vote: tertiary/quaternary are swapped on light palettes,
+  // so tertiary is warm on light, cool on dark). Blood-red beside warm
+  // accents, berkeley-blue beside cool ones. Used by e.g. .subforum-link.
+  --bm-accent-shadow: #{dark-light-choose(#5f1a07, #053663)};
+
+  // Category-group banner (.custom-category-group-toggle). Beta vote:
+  // light mode gets the dark palette's teal with surface-toned lettering and
+  // a berkeley shadow; dark mode keeps its current ribbon look (orange bg,
+  // cream lettering, blood-red shadow).
+  --bm-banner-bg: #{dark-light-choose(#0da9b1, $quaternary)};
+  --bm-banner-ink: #{dark-light-choose("var(--bm-surface-2)", #d4be9f)};
+  --bm-banner-shadow: #{dark-light-choose(
+      $heading-text-shadow-berkeley,
+      $heading-text-shadow-dark
+    )};
+
+  // Shadow/icon color pairing with the QUATERNARY family per mode (the
+  // inverse of --bm-accent-shadow): berkeley beside light's cool quaternary,
+  // blood-red beside dark's warm one. Used by seek pills (.bm-card-seek,
+  // directory seeking pill).
+  --bm-accent2-shadow: #{dark-light-choose(#053663, #5f1a07)};
+
+  // Brand buttons (JCink button-74 family: profile link buttons, directory
+  // apply/sort-active, card Message/Chat). Beta vote 2026-07-05: light mode
+  // uses the dark palette's orange with teal hover; dark mode keeps its
+  // current look (tertiary bg, hover = no-op bg + quaternary text).
+  --bm-btn-bg: #{dark-light-choose(#ec5d37, "var(--tertiary)")};
+  --bm-btn-hover-bg: #{dark-light-choose(#0da9b1, "var(--tertiary)")};
+  --bm-btn-hover-ink: #{dark-light-choose(#0da9b1, "var(--quaternary)")};
+
+  // Seeking-strip icon (.bm-seeking): light icon on light mode's darker teal
+  // strip — the inverse of dark mode's darker icon on its lighter orange
+  // strip (which stays as-is via the fallback pairing).
+  --bm-seeking-icon: #{dark-light-choose(#0da9b1, #5f1a07)};
+
+  // Category page banner (discourse-category-banners component,
+  // div[class^=category-title-header]). Beta decision 2026-07-05: neutral
+  // "third surface" — steps the OPPOSITE direction from cards relative to
+  // the page (cards lighter, banner darker on light; inverted on dark) so
+  // it reads as a different kind of thing without copying the card look.
+  // Both values are hand-pinned ramp slots, so future palettes derive
+  // their own correct banner for free. Category icons keep their colors.
+  --bm-category-header-bg: #{dark-light-choose(
+      $secondary-medium,
+      $secondary-high
+    )};
+
+  // Page backdrop — the color behind the diamond pattern (core paints it
+  // with `html { background-color: var(--secondary) }`; this overrides on
+  // body WITHOUT moving the secondary slot, so cards/banners/ramps that
+  // derive from secondary stay put). Trial color 2026-07-05; dark
+  // unchanged. Swap the hex here to trial others.
+  --bm-page-backdrop: #{dark-light-choose(#72c4ca, $secondary)};
 
   // Outline text-shadow for pills that sit on palette surfaces:
   // needed for pop on dark palettes, smudgy on light ones.
@@ -84,4 +140,19 @@ $bg-img: #{dark-light-choose($bg_dark, $bg_light)};
       none,
       "drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000)"
     )};
+
+  // ---------------------------------------------------------------------------
+  // RP resource card graphics (architecture rule 5: graphics are theme-bound,
+  // light/dark swap keys off the scheme). Each theme defines these six vars
+  // from its own assets; the jcink-category-port component consumes them with
+  // a fallback to its bundled (WTTI dark) images. PLACEHOLDERS: the -light
+  // files are currently copies of the dark-designed art — when the designer
+  // delivers, just replace the files in assets/, no code change needed.
+  // ---------------------------------------------------------------------------
+  --bm-gfx-talk-show: url(#{dark-light-choose($rp_talk_show_light, $rp_talk_show_dark)});
+  --bm-gfx-internet-safety: url(#{dark-light-choose($rp_internet_safety_light, $rp_internet_safety_dark)});
+  --bm-gfx-literary-guide: url(#{dark-light-choose($rp_literary_guide_light, $rp_literary_guide_dark)});
+  --bm-gfx-ad-guide: url(#{dark-light-choose($rp_ad_guide_light, $rp_ad_guide_dark)});
+  --bm-gfx-rp-index: url(#{dark-light-choose($rp_index_light, $rp_index_dark)});
+  --bm-gfx-help-series: url(#{dark-light-choose($rp_help_series_light, $rp_help_series_dark)});
 }

@@ -7,8 +7,8 @@
     "clown-light": {
       "primary": "3a3126",
       "secondary": "efddc0",
-      "tertiary": "05666b",
-      "quaternary": "a53817",
+      "tertiary": "a53817",
+      "quaternary": "05666b",
       "header_background": "0da9b1",
       "header_primary": "121325",
       "highlight": "ebd1ae",
@@ -83,7 +83,19 @@
     "livvic": "assets/Livvic-Regular.ttf",
     "atkinson_hyperlegible": "assets/AtkinsonHyperlegible-Regular.ttf",
     "bg_light": "assets/white-diamond-dark.png",
-    "bg_dark": "assets/white-diamond.png"
+    "bg_dark": "assets/white-diamond.png",
+    "rp_talk_show_light": "assets/rp-talk-show-light.png",
+    "rp_talk_show_dark": "assets/rp-talk-show-dark.png",
+    "rp_internet_safety_light": "assets/rp-internet-safety-light.png",
+    "rp_internet_safety_dark": "assets/rp-internet-safety-dark.png",
+    "rp_literary_guide_light": "assets/rp-literary-guide-light.png",
+    "rp_literary_guide_dark": "assets/rp-literary-guide-dark.png",
+    "rp_ad_guide_light": "assets/rp-ad-guide-light.png",
+    "rp_ad_guide_dark": "assets/rp-ad-guide-dark.png",
+    "rp_index_light": "assets/rp-index-light.png",
+    "rp_index_dark": "assets/rp-index-dark.png",
+    "rp_help_series_light": "assets/rp-help-series-light.png",
+    "rp_help_series_dark": "assets/rp-help-series-dark.png"
   },
   "modifiers": {
     "serialize_topic_excerpts": true

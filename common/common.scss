@@ -144,6 +144,7 @@ html.has-full-page-chat body #main-outlet {
 body {
   background-size: auto;
   background-image: var(--bg-img);
+  background-color: var(--bm-page-backdrop, var(--secondary));
 }
 
 h1,
@@ -152,7 +153,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--header_primary);
+  color: var(--bm-heading-ink, var(--primary));
   font-weight: 400;
   text-transform: uppercase;
 }
@@ -224,6 +225,7 @@ input[type="color"]:focus,
 
 .d-header {
   border-bottom: 5px dotted var(--quaternary);
+  box-shadow: none;
 }
 
 // Header icons follow header_primary — the one slot guaranteed by the
@@ -426,10 +428,41 @@ div.edit-category .edit-category-title-bar {
   filter: var(--theme__title-dropshadow);
 }
 
-// Category Title Header
+// Category Title Header (discourse-category-banners component)
+// Beta decision 2026-07-05: neutral third-surface bg + dotted quaternary
+// rule echoing the site header — replaces the category-color background,
+// which was unmatchable across palettes. !important beats the component's
+// inline category colors. Category icons keep their own colors (they're
+// colored by explicit per-category rules, not currentColor from here).
 div[class^="category-title-header"] {
-  border-radius: var(--sublime-border-radius);
+  border-radius: var(--sublime-border-radius) var(--sublime-border-radius) 0 0;
   margin-bottom: 10px;
+  background: var(--bm-category-header-bg, var(--secondary)) !important;
+  color: var(--primary) !important;
+  border-bottom: 5px dotted var(--quaternary);
+
+  // Neutral surface, so headings take the normal heading ink (rule 4 no
+  // longer applies — this is not a brand-colored background anymore).
+  h1,
+  h2,
+  h3 {
+    color: var(--bm-heading-ink, var(--primary));
+    text-shadow: none;
+
+    // Category icon scales with the heading instead of staying body-sized.
+    // Needs the full badge chain: the category-banners component pins
+    // .75em at (0,4,1) and core badges.scss pins emoji .74em at (0,4,0) —
+    // this selector is (0,4,2), so it outranks both. Covers icon-style
+    // categories (svg.d-icon) and custom-emoji ones (img.emoji).
+    .badge-category__wrapper .badge-category {
+      .d-icon,
+      .emoji {
+        width: 1.5em;
+        height: 1.5em;
+        vertical-align: -0.125em;
+      }
+    }
+  }
 }
 
 .topic-list-body {
