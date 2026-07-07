@@ -137,6 +137,12 @@ a.mention,
   background: none !important;
 }
 
+// Nav bar color (beta vote 2026-07-06) — see --bm-header-bar-bg in
+// color_definitions.scss. Slot untouched; bar only.
+.d-header {
+  background-color: var(--bm-header-bar-bg, var(--header_background));
+}
+
 html.has-full-page-chat body #main-outlet {
   padding-bottom: unset !important;
 }
@@ -255,6 +261,15 @@ input[type="color"]:focus,
   box-sizing: border-box;
   width: 100%;
   margin: auto;
+
+  // Scheme-aware variant toggle (vars in color_definitions.scss).
+  .welcome-logo.light-mode-logo {
+    display: var(--bm-welcome-light-display, block);
+  }
+
+  .welcome-logo.dark-mode-logo {
+    display: var(--bm-welcome-dark-display, block);
+  }
 }
 
 body.has-full-page-chat #custom-welcome-banner,

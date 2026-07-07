@@ -109,6 +109,19 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   // strip (which stays as-is via the fallback pairing).
   --bm-seeking-icon: #{dark-light-choose(#0da9b1, #5f1a07)};
 
+  // Welcome banner light/dark swap (consumed by common.scss; the initializer
+  // renders both variants and duplicates one into both slots when only one
+  // exists, so exactly one image is ever visible).
+  --bm-welcome-light-display: #{dark-light-choose(block, none)};
+  --bm-welcome-dark-display: #{dark-light-choose(none, block)};
+
+  // Nav bar color (beta vote 2026-07-06): light mode header bar goes brand
+  // orange. ONLY the visual bar — the header_background SLOT is untouched,
+  // so every derivation that reads it (surfaces, cross-theme --bm-surface-2,
+  // tint ramps) stays exactly where it was. Dark mode unchanged.
+  // Contrast verified: header_primary #121325 on #ec5d37 = 5.4:1 (AA).
+  --bm-header-bar-bg: #{dark-light-choose(#ec5d37, $header_background)};
+
   // Category page banner (discourse-category-banners component,
   // div[class^=category-title-header]). Beta decision 2026-07-05: neutral
   // "third surface" — steps the OPPOSITE direction from cards relative to
