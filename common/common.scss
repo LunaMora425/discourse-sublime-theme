@@ -480,6 +480,15 @@ div[class^="category-title-header"] {
   }
 }
 
+// Onebox link cards (beta ask 2026-07-06, both themes / all palettes):
+// core gives them NO background and a primary-300 hairline — they melted
+// into every surface. Card surface + a real ring; the semantic var makes
+// this palette-proof.
+aside.onebox {
+  background: var(--bm-surface-2, var(--secondary));
+  --onebox-border-color: var(--primary-medium);
+}
+
 .topic-list-body {
   tr.bulk-selecting.topic-card {
     gap: 0;
