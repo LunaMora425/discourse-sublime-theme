@@ -622,3 +622,71 @@ img.emoji.only-emoji {
 .about__activities-item.likes {
   display: none;
 }
+
+/* ==========================================================================
+   TOPIC TAGS = W3 "stamp" (chip/tag unification, Luna 2026-07-09).
+   One language with .bm-chip / the directory filter chips: quiet flat
+   fill + hairline, ink text; accent only on hover. Tag names stay
+   lowercase-dasherized (Luna's casing pick — as-is).
+   a.discourse-tag.box = (0,2,1): beats core's box styling AND horizon's
+   .hc-topic-card__tags .discourse-tag (0,2,0) pin at any load order.
+   Sizing/padding deliberately NOT set — each context (topic card, thread
+   title, tags page) keeps its own scale.
+   ========================================================================== */
+a.discourse-tag.box {
+  background: var(--primary-very-low);
+  border: 1px solid var(--primary-low-mid);
+  border-radius: 4px;
+  color: var(--primary);
+
+  &:hover,
+  &:focus-visible {
+    background: var(--tertiary);
+    // Brand-colored surface: mode-invariant cream + dark outline.
+    color: var(--bm-ribbon-text, #d4be9f);
+    text-shadow: var(
+      --bm-brand-text-outline,
+      1px 1px 2px #000,
+      -1px -1px 2px #000,
+      1px 2px 2px #000,
+      1px -1px 2px #000
+    );
+  }
+}
+
+/* ==========================================================================
+   CATEGORY BANNER — mobile overflow guard (all three themes, 2026-07-09).
+   Root cause: core renders the banner title as ONE nowrap category badge
+   inside a flex h1; nothing in the chain (flex min-width:auto + the
+   component's content-box .category-title-contents) can shrink below the
+   full title line, so long titles (NSFW One-On-One Search) blow the banner
+   out of the outlet on narrow screens. Structural guard only — no visual
+   change on desktop (the component's 500px cap survives via min()).
+   ========================================================================== */
+div[class^="category-title-header"] .category-title-contents {
+  max-width: min(500px, 100%);
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+div[class^="category-title-header"] h1 {
+  min-width: 0;
+}
+
+div[class^="category-title-header"] .badge-category__wrapper,
+div[class^="category-title-header"] .badge-category__name {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   CHAT — hover/consecutive-message timestamps (Luna 2026-07-09): core
+   paints them with --secondary-medium, a PAGE-side tint that's near-
+   invisible on our hand-pinned ramps (#2a2c45 on the navy page). Muted
+   TEXT-side ink instead. Selectors mirror core's + body — the chat
+   plugin's CSS is a lazily-appended body stylesheet, so exceed, never tie.
+   ========================================================================== */
+body .chat-message-container:hover .chat-message-left-gutter .chat-time,
+body .chat-message-container.-user-info-hidden .chat-time {
+  color: var(--primary-medium);
+}
