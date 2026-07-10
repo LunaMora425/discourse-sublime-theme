@@ -1,26 +1,116 @@
+// Rule 0 (Round B): the gradient's hue stripes derive from the accents
+// (cool wash / warm wash); the white + gray stripes are achromatic (exempt).
+// clown-light home: mix values land within a few hexes of the old constants.
 $light-bg-gradient:
   linear-gradient(180deg, #fff 0%, rgb(255, 255, 255, 0) 16%),
-  linear-gradient(90deg, #f1f1f1 0%, #b4ced6 28%, #ffe5db 100%);
+  linear-gradient(
+    90deg,
+    #f1f1f1 0%,
+    mix($quaternary, #fff, 30%) 28%,
+    mix($tertiary, #fff, 20%) 100%
+  );
 $dark-bg-gradient:
   linear-gradient(180deg, #000 0%, rgb(20, 24, 28, 0) 16%),
   linear-gradient(90deg, #000 0%, #28313b 28%, #485461 100%);
 $category-hover-shadow-light: 0px 10px 30px 0px rgb(2, 47, 57, 0.1);
 $category-hover-shadow-dark: 0px -1px 40px 0px rgb(134, 134, 134, 0.213);
+// Rule 0 (Round B): the blood-red/berkeley shadow constants become deep
+// kins of the ACTIVE accents (warm = tertiary light / quaternary dark,
+// post-swap contract; cool = the inverse). clown home: warm kin -65% lands
+// ~exactly the old blood-red (#5d1b09 vs #5f1a07); the cool kin is
+// TEAL-family (berkeley was blue — accepted hue shift under rule 0).
+$bm-shadow-warm: scale-color(
+  dark-light-choose($tertiary, $quaternary),
+  $lightness: -65%
+);
+$bm-shadow-cool: scale-color(
+  dark-light-choose($quaternary, $tertiary),
+  $lightness: -45%
+);
 $heading-text-shadow-dark:
-  0 -1px 0 #5f1a07,
-  0 1px 5px rgb(95, 26, 7),
-  0 2px 5px #5f1a07,
-  0 3px 5px #5f1a07,
-  0 1px 5px #5f1a07;
-$heading-drop-shadow-dark: drop-shadow(-1px 2px 3px #5f1a07a4)
-  drop-shadow(2px 1px 3px #5f1a07a4) drop-shadow(0px -1px 3px #5f1a07a4);
-// Berkeley-blue variant of the layered heading shadow (pairs with teal).
+  0 -1px 0 $bm-shadow-warm,
+  0 1px 5px $bm-shadow-warm,
+  0 2px 5px $bm-shadow-warm,
+  0 3px 5px $bm-shadow-warm,
+  0 1px 5px $bm-shadow-warm;
+$heading-drop-shadow-dark: drop-shadow(-1px 2px 3px rgba($bm-shadow-warm, 0.64))
+  drop-shadow(2px 1px 3px rgba($bm-shadow-warm, 0.64))
+  drop-shadow(0px -1px 3px rgba($bm-shadow-warm, 0.64));
+// Cool-accent variant of the layered heading shadow.
 $heading-text-shadow-berkeley:
-  0 -1px 0 #053663,
-  0 1px 5px rgb(5, 54, 99),
-  0 2px 5px #053663,
-  0 3px 5px #053663,
-  0 1px 5px #053663;
+  0 -1px 0 $bm-shadow-cool,
+  0 1px 5px $bm-shadow-cool,
+  0 2px 5px $bm-shadow-cool,
+  0 3px 5px $bm-shadow-cool,
+  0 1px 5px $bm-shadow-cool;
+
+// Layer-2 guard (Luna's wiki-dark walk, 2026-07-10): a glow only reads as a
+// SHADOW when it sits near the page's darkness. Palettes whose accent kin
+// computes LIGHTER than the page (wiki-dark's lavender warm → mid-purple)
+// produce a smudge BLOB around thin text instead — those resolve to none.
+// Light schemes always pass (their page is bright, the kins are dark).
+$bm-warm-glow: if(
+  dc-color-brightness($bm-shadow-warm) <=
+    dc-color-brightness($secondary) + 30,
+  $heading-text-shadow-dark,
+  none
+);
+$bm-warm-drop-glow: if(
+  dc-color-brightness($bm-shadow-warm) <=
+    dc-color-brightness($secondary) + 30,
+  $heading-drop-shadow-dark,
+  none
+);
+$bm-cool-glow: if(
+  dc-color-brightness($bm-shadow-cool) <=
+    dc-color-brightness($secondary) + 30,
+  $heading-text-shadow-berkeley,
+  none
+);
+
+// Rule-0 helpers: abs + max-contrast ink proxy (whichever of ink/page sits
+// further from the fill in AERT brightness — SCSS-computable stand-in for a
+// true contrast comparison).
+@function bm-abs($n) {
+  @if $n < 0 {
+    @return -$n;
+  }
+  @return $n;
+}
+
+@function bm-ink-for($fill) {
+  $dp: bm-abs(dc-color-brightness($primary) - dc-color-brightness($fill));
+  $ds: bm-abs(dc-color-brightness($secondary) - dc-color-brightness($fill));
+  @if $dp > $ds {
+    @return $primary;
+  }
+  @return $secondary;
+}
+
+// Button lettering, resolved as an SCSS value so the outline guard below can
+// measure its brightness.
+$bm-btn-ink-val: if(
+  bm-abs(dc-color-brightness($highlight) - dc-color-brightness($tertiary)) <
+    60,
+  bm-ink-for($tertiary),
+  $highlight
+);
+
+// Compile-time surface guard (Layer-1 matrix RC-3, 2026-07-09): use a ramp
+// slot as a SURFACE only when it's a neutral step near the page color --
+// foreign palettes can put something harsh in the slot (wiki palettes'
+// DERIVED secondary-medium is a mid-gray #808080; brick heading = 1.67:1).
+// AERT brightness, the same scale core's dark-light functions use.
+@function bm-surface-or($candidate, $page, $fallback) {
+  $d: dc-color-brightness($candidate) - dc-color-brightness($page);
+  @if $d < 0 {
+    $d: -$d;
+  }
+  @if $d < 60 {
+    @return $candidate;
+  }
+  @return $fallback;
+}
 
 $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
 
@@ -32,17 +122,36 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
       $category-hover-shadow-light,
       $category-hover-shadow-dark
     )};
-  --sidebar-highlight: #2b7c85;
+  // Rule 0: sublime-leftover teal trim derives from the COOL accent
+  // (clown home ≈ exact: scale(0da9b1, -25%) = #0a7f85 vs the old #2b7c85).
+  --sidebar-highlight: #{scale-color(
+      dark-light-choose($quaternary, $tertiary),
+      $lightness: -25%
+    )};
   --bg-img: url(#{$bg-img});
   --theme__title-boxshadow: #{dark-light-choose(
       "0 10px 30px 0px rgb(2, 47, 57, 0.1)",
-      $heading-text-shadow-dark
+      $bm-warm-glow
     )};
-  --theme__title-dropshadow: #{dark-light-choose(
-      none,
-      $heading-drop-shadow-dark
+  --theme__title-dropshadow: #{dark-light-choose(none, $bm-warm-drop-glow)};
+  // Rule 0 (Round B): text-role accent ink. Light schemes with a BRIGHT
+  // tertiary (the community-voted immutable brand orange now lives in the
+  // slot) darken it for READING (-35% ≈ the old brick: #ad3110 vs #a53817,
+  // 4.89:1 on the cream page); dark schemes keep the raw accent. Same
+  // machinery as BMONGER's kins.
+  --bm-accent-ink: #{dark-light-choose(
+      if(
+        dc-color-brightness($tertiary) > 120,
+        scale-color($tertiary, $lightness: -35%),
+        $tertiary
+      ),
+      $tertiary
     )};
-  --title-color--read: var(--tertiary);
+
+  // Links read the kin: core sets `--d-link-color: var(--tertiary)` in its
+  // own color defs, and theme defs compile AFTER core defs — this wins.
+  --d-link-color: var(--bm-accent-ink);
+  --title-color--read: var(--bm-accent-ink);
 
   // ---------------------------------------------------------------------------
   // Barbermonger semantic layer.
@@ -66,48 +175,96 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   // Ribbons + brand-colored pills are mode-invariant brand furniture:
   // always brand orange with cream lettering and a dark outline.
   --bm-ribbon-bg: #{$quaternary};
-  --bm-ribbon-text: #d4be9f;
-  --bm-ribbon-shadow: #{$heading-text-shadow-dark};
+  // Rule 0: cream lettering = the HIGHLIGHT slot (clown-dark home EXACT —
+  // its highlight IS #d4be9f; clown-light's is the cream-family #ebd1ae).
+  // Guard: when a palette's highlight sits too close to the quaternary fill
+  // (bmonger's yellow-on-green), fall back to max-contrast ink.
+  --bm-ribbon-text: #{if(
+      bm-abs(
+          dc-color-brightness($highlight) - dc-color-brightness($quaternary)
+        ) <
+        60,
+      bm-ink-for($quaternary),
+      $highlight
+    )};
+  --bm-ribbon-shadow: #{$bm-warm-glow}; // guarded (Layer-2)
 
   // Display headings (Rye) in topic/post view: brick carnival-poster ink on
   // light palettes; dark palettes keep the palette ink (cream on clown-dark).
-  --bm-heading-ink: #{dark-light-choose(#a53817, $primary)};
+  // Rule 0 (2026-07-10, Round A): the brick constant derives from the ACTIVE
+  // tertiary — clown-light home is EXACT (its tertiary IS #a53817); bright
+  // foreign tertiaries get a -25% kin (bmonger-light #c73913, 5.22:1).
+  // Light headings ride the accent-ink kin (-35%: deep enough for the
+  // category-banner third surface too — -25% was 2.97:1 there).
+  --bm-heading-ink: #{dark-light-choose("var(--bm-accent-ink)", $primary)};
 
   // Hard shadow/border color that pairs with the CURRENT tertiary hue family
   // (2026-07-05 beta vote: tertiary/quaternary are swapped on light palettes,
   // so tertiary is warm on light, cool on dark). Blood-red beside warm
   // accents, berkeley-blue beside cool ones. Used by e.g. .subforum-link.
-  --bm-accent-shadow: #{dark-light-choose(#5f1a07, #053663)};
+  --bm-accent-shadow: #{dark-light-choose(
+      scale-color($tertiary, $lightness: -65%),
+      scale-color($tertiary, $lightness: -45%)
+    )};
 
   // Category-group banner (.custom-category-group-toggle). Beta vote:
   // light mode gets the dark palette's teal with surface-toned lettering and
   // a berkeley shadow; dark mode keeps its current ribbon look (orange bg,
   // cream lettering, blood-red shadow).
-  --bm-banner-bg: #{dark-light-choose(#0da9b1, $quaternary)};
-  --bm-banner-ink: #{dark-light-choose("var(--bm-surface-2)", #d4be9f)};
-  --bm-banner-shadow: #{dark-light-choose(
-      $heading-text-shadow-berkeley,
-      $heading-text-shadow-dark
+  --bm-banner-bg: #{$quaternary}; // rule 0: the cool accent, both modes
+  // Dark banner ink: highlight only when it contrasts the quaternary fill —
+  // with the glow guarded off, low-contrast pairs (bmonger's yellow-on-teal)
+  // fall back to max-contrast ink (Layer-2 walk round 2).
+  --bm-banner-ink: #{dark-light-choose(
+      "var(--bm-surface-2)",
+      if(
+        bm-abs(
+            dc-color-brightness($highlight) - dc-color-brightness($quaternary)
+          ) <
+          60,
+        bm-ink-for($quaternary),
+        $highlight
+      )
     )};
+  --bm-banner-shadow: #{dark-light-choose($bm-cool-glow, $bm-warm-glow)};
 
   // Shadow/icon color pairing with the QUATERNARY family per mode (the
   // inverse of --bm-accent-shadow): berkeley beside light's cool quaternary,
   // blood-red beside dark's warm one. Used by seek pills (.bm-card-seek,
   // directory seeking pill).
-  --bm-accent2-shadow: #{dark-light-choose(#053663, #5f1a07)};
+  --bm-accent2-shadow: #{dark-light-choose(
+      scale-color($quaternary, $lightness: -45%),
+      scale-color($quaternary, $lightness: -65%)
+    )};
 
   // Brand buttons (JCink button-74 family: profile link buttons, directory
   // apply/sort-active, card Message/Chat). Beta vote 2026-07-05: light mode
   // uses the dark palette's orange with teal hover; dark mode keeps its
   // current look (tertiary bg, hover = no-op bg + quaternary text).
-  --bm-btn-bg: #{dark-light-choose(#ec5d37, "var(--tertiary)")};
-  --bm-btn-hover-bg: #{dark-light-choose(#0da9b1, "var(--tertiary)")};
-  --bm-btn-hover-ink: #{dark-light-choose(#0da9b1, "var(--quaternary)")};
+  // Rule 0: the brand button IS the tertiary (the immutable orange lives in
+  // the slot now — clown home exact both modes).
+  --bm-btn-bg: #{$tertiary};
+  // Lettering for components to adopt (cream-family via highlight, guarded).
+  // The 4-way #000 outline only helps BRIGHT ink — dark ink on a light fill
+  // turns glyphs into blobs (wiki-dark pills, Layer-2 walk round 2), so the
+  // outline switches off whenever the resolved ink is darker than the fill.
+  --bm-btn-ink: #{$bm-btn-ink-val};
+  --bm-btn-text-outline: #{if(
+      dc-color-brightness($bm-btn-ink-val) <
+        dc-color-brightness($tertiary),
+      none,
+      "1px 1px 2px #000, -1px -1px 2px #000, 1px 2px 2px #000, 1px -1px 2px #000"
+    )};
+  --bm-btn-hover-bg: #{dark-light-choose($quaternary, $tertiary)};
+  --bm-btn-hover-ink: #{$quaternary};
 
   // Seeking-strip icon (.bm-seeking): light icon on light mode's darker teal
   // strip — the inverse of dark mode's darker icon on its lighter orange
   // strip (which stays as-is via the fallback pairing).
-  --bm-seeking-icon: #{dark-light-choose(#0da9b1, #5f1a07)};
+  --bm-seeking-icon: #{dark-light-choose(
+      $quaternary,
+      scale-color($quaternary, $lightness: -65%)
+    )};
 
   // Welcome banner light/dark swap (consumed by common.scss; the initializer
   // renders both variants and duplicates one into both slots when only one
@@ -120,7 +277,26 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   // so every derivation that reads it (surfaces, cross-theme --bm-surface-2,
   // tint ramps) stays exactly where it was. Dark mode unchanged.
   // Contrast verified: header_primary #121325 on #ec5d37 = 5.4:1 (AA).
-  --bm-header-bar-bg: #{dark-light-choose(#ec5d37, $header_background)};
+  --bm-header-bar-bg: #{dark-light-choose($tertiary, $header_background)};
+
+  // RC-8 (Layer-1 matrix): the light bar is a CONSTANT orange, so its ink
+  // must be the designed navy constant too -- the ACTIVE palette's
+  // header_primary may not contrast it (bmonger-light's purple = 2.46:1).
+  // clown-light's header_primary IS #121325, so home is pixel-identical.
+  // Dark keeps the slot. (Header ICONS still ride core's header_primary
+  // blends -- pale on foreign light palettes; Layer-2 eyeball item.)
+  --bm-header-bar-ink: #{dark-light-choose(
+      if(
+        bm-abs(
+            dc-color-brightness($header_primary) -
+              dc-color-brightness($tertiary)
+          ) >=
+          90,
+        $header_primary,
+        bm-ink-for($tertiary)
+      ),
+      $header_primary
+    )};
 
   // Category page banner (discourse-category-banners component,
   // div[class^=category-title-header]). Beta decision 2026-07-05: neutral
@@ -129,9 +305,12 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   // it reads as a different kind of thing without copying the card look.
   // Both values are hand-pinned ramp slots, so future palettes derive
   // their own correct banner for free. Category icons keep their colors.
+  // RC-3 guard: hand-pinned palettes keep their gentle pinned steps
+  // (verified: all four pass the guard, zero home change); wiki palettes'
+  // harsh derived values fall back to a 12%/18% ink-into-page mix step.
   --bm-category-header-bg: #{dark-light-choose(
-      $secondary-medium,
-      $secondary-high
+      bm-surface-or($secondary-medium, $secondary, mix($primary, $secondary, 12%)),
+      bm-surface-or($secondary-high, $secondary, mix($primary, $secondary, 18%))
     )};
 
   // Page backdrop — the color behind the diamond pattern (core paints it
@@ -139,7 +318,10 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   // body WITHOUT moving the secondary slot, so cards/banners/ramps that
   // derive from secondary stay put). Trial color 2026-07-05; dark
   // unchanged. Swap the hex here to trial others.
-  --bm-page-backdrop: #{dark-light-choose(#72c4ca, $secondary)};
+  --bm-page-backdrop: #{dark-light-choose(
+      mix($quaternary, #fff, 55%),
+      $secondary
+    )}; // rule 0: cool-accent wash (clown home ≈ the old #72c4ca trial)
 
   // Outline text-shadow for pills that sit on palette surfaces:
   // needed for pop on dark palettes, smudgy on light ones.

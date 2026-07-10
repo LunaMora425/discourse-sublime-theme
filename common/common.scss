@@ -35,8 +35,10 @@
   // --- Decorative text-shadow colours (no palette slot) ----------------
   // JCink used these as glows under accent text. Apply them in custom
   // rules via text-shadow where you want the effect.
-  --color-quaternary-shadow: #5f1a07; // blood-red
-  --color-tertiary-shadow: #053663; // berkeley-blue
+  // Rule 0 (Round B): the legacy tokens ride the derived accent-kin shadows
+  // (clown home: warm ≈ the old blood-red; cool = teal-family, was berkeley).
+  --color-quaternary-shadow: var(--bm-accent2-shadow, #5f1a07);
+  --color-tertiary-shadow: var(--bm-accent-shadow, #053663);
   --content-border-color: var(--color-tertiary-shadow);
 }
 
@@ -141,6 +143,9 @@ a.mention,
 // color_definitions.scss. Slot untouched; bar only.
 .d-header {
   background-color: var(--bm-header-bar-bg, var(--header_background));
+  // RC-8: ink pairs with the constant bar, not the active palette's
+  // header_primary (see color_definitions).
+  color: var(--bm-header-bar-ink, var(--header_primary));
 }
 
 html.has-full-page-chat body #main-outlet {
@@ -689,4 +694,23 @@ div[class^="category-title-header"] .badge-category__name {
 body .chat-message-container:hover .chat-message-left-gutter .chat-time,
 body .chat-message-container.-user-info-hidden .chat-time {
   color: var(--primary-medium);
+}
+
+// Layer-2 fix (Luna's bmonger-palette walk, 2026-07-10): the category-port
+// letters subforum pills with --bm-ribbon-text, which is guarded against the
+// QUATERNARY ribbon fill — but the pills sit on the TERTIARY button fill, so
+// foreign palettes could resolve an unreadable pairing. Repoint to the
+// button-family ink (guarded highlight vs tertiary; the pill's own 4-way
+// #000 outline carries the brand-low cases). #main-outlet outranks the
+// component's bare .subforum-link !important at any load order.
+#main-outlet .subforum-link {
+  color: var(--bm-btn-ink, var(--bm-ribbon-text, #d4be9f)) !important;
+  // Outline only with bright ink (see --bm-btn-text-outline).
+  text-shadow: var(
+    --bm-btn-text-outline,
+    1px 1px 2px #000,
+    -1px -1px 2px #000,
+    1px 2px 2px #000,
+    1px -1px 2px #000
+  ) !important;
 }
