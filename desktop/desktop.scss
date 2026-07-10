@@ -4,24 +4,11 @@
 }
 
 body.has-full-page-chat {
-  overflow: hidden;
-
   #main-outlet {
     max-width: unset;
   }
 
   .sidebar-wrapper {
-    --top-offset: 30px;
-    --bottom-offset: 50px;
-    height: auto;
-    max-height: calc(
-      var(--composer-vh, 1dvh) *
-        100 - var(--main-outlet-offset, 0px) - var(--top-offset, 0px) - var(
-          --bottom-offset,
-          0px
-        )
-    );
-    margin: var(--top-offset) 0 var(--bottom-offset);
     background-color: var(--secondary);
     border-radius: var(--sublime-border-radius);
     top: calc(var(--header-offset) + 30px);
@@ -49,14 +36,6 @@ body.has-full-page-chat {
 
 .desktop-view .sidebar-footer-wrapper .sidebar-footer-container::before {
   background: linear-gradient(to bottom, transparent, rgb(var(--secondary), 1));
-}
-
-// Logo + Welcome Box
-#main-outlet-wrapper {
-  grid-template-areas:
-    "sidebar banner"
-    "sidebar content"
-    "sidebar below-content";
 }
 
 // Main Container
@@ -93,7 +72,7 @@ body #main-outlet {
 }
 
 body.has-full-page-chat #main-outlet {
-  width: 100% !important; // overriding media queries
+  width: 100% !important;
 }
 
 // Modals
@@ -121,9 +100,6 @@ body.has-full-page-chat #main-outlet {
     color: var(--secondary);
     background: var(--tertiary);
 
-    // This desktop-only solid bg is var(--tertiary), but core's nav-active
-    // mixin ALSO colors the icon var(--tertiary) — icon vanished into the
-    // bg in both modes (mobile is fine: no bg there). Match the text.
     .d-icon {
       color: var(--secondary);
     }
@@ -136,99 +112,21 @@ body.has-full-page-chat #main-outlet {
   }
 }
 
-body.has-sidebar-page {
-  .chat-channel {
-    height: calc(
-      var(--composer-vh, 1vh) * 100 - var(--main-outlet-offset, 0px) -
-        1px - var(--chat-header-offset, 0) - var(--composer-height, 0px) - 82px
-    );
-  }
-
-  &.has-full-page-chat #main-outlet-wrapper {
-    gap: 0 var(--d-main-content-gap);
-  }
-}
-
-.has-full-page-chat:not(.discourse-sidebar) .full-page-chat .channels-list {
-  height: calc(100vh - var(--main-outlet-offset) - 82px);
-  box-sizing: border-box;
-}
-
-.ipados-device.has-full-page-chat:not(.discourse-sidebar)
-  .full-page-chat
-  .channels-list {
-  height: inherit;
-  box-sizing: border-box;
-}
-
-body.has-full-page-chat {
-  #main-outlet {
-    padding-bottom: 0 !important; // overrides another important
-  }
-}
-
-body:not(.has-sidebar-page).has-full-page-chat {
-  #main-outlet-wrapper {
-    max-height: calc(100dvh - var(--header-offset));
-  }
-
-  .chat-channel {
-    height: calc(
-      var(--composer-vh, 1vh) * 100 - var(--main-outlet-offset, 0px) -
-        1px - var(--chat-header-offset, 0) - var(--composer-height, 0px) - 82px
-    );
-  }
-}
-
 // Admin Area
 html.admin-area #main-outlet {
   width: 100%;
   box-sizing: border-box;
 }
 
-// fixing chat window when new topic or reply is open
-.chat-drawer-outlet-container {
-  padding-bottom: 0 !important;
-  right: 10px !important;
-}
-
-body:not(.has-sidebar-page) #reply-control:not(.fullscreen).hide-preview {
-  margin-left: auto !important;
-}
-
 // chat fixes
 .has-full-page-chat {
-  .full-page-chat {
-    border-left: none;
-    border-right: none;
-  }
-
-  .chat-pinned-messages-list.chat-messages-scroller {
-    max-height: 800px;
-  }
-
   .c-channel-info,
   .chat-browse-view {
-    box-sizing: border-box;
     max-height: 80vh;
     overflow-y: scroll;
-    max-width: unset;
   }
 }
 
-.custom-category-group-search .custom-category-group {
-  grid-template-columns: 1fr;
-}
-
-.custom-category-group {
-  // Category repositioning with the Group Categories component
-  li[data-category-id="15"],
-  // li[data-category-id="17"],
-  li[data-category-id="32"] {
-    grid-column: 1 / span 2;
-  }
-}
-// remove the category banner image since it doesn't work well with the new category box design
 .category-boxes .category-box .category-box-inner .category-logo {
   display: none;
 }

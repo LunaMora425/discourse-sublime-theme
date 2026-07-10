@@ -1,6 +1,9 @@
 {
   "name": "Welcome to the Internet",
-  "authors": ["Discourse", "Luna"],
+  "authors": [
+    "Discourse",
+    "Luna"
+  ],
   "about_url": "https://meta.discourse.org/t/discourse-sublime-theme/242048",
   "license_url": "https://github.com/discourse/discourse-sublime-theme/blob/main/LICENSE",
   "color_schemes": {
@@ -99,6 +102,5 @@
   },
   "modifiers": {
     "serialize_topic_excerpts": true
-  },
-  "screenshots": ["screenshots/light.webp", "screenshots/dark.webp"]
+  }
 }

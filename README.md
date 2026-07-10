@@ -1,12 +1,6 @@
-# Welcome to the Internet - a fork of Discourse's Sublime Theme
+# Welcome to the Internet (WTTI)
 
-We're attempting to modify an existing theme in order to learn how it's done.
-
-## Features
-
-A simple and sublime theme for Discourse that is designed from scratch to integrate well with the sidebar.
-
----
+The default Barbermonger theme — a fork of Discourse's Sublime theme. Owns the site's color palettes (`about.json`) and the theme-owned `--bm-*` semantic variable layer (`common/color_definitions.scss`) consumed by the shared Barbermonger components.
 
 ## Theme configuration
 
@@ -14,11 +8,11 @@ Change the following settings for this theme to render properly.
 
 ### Edit Theme
 
-Go to **Admin > Themes & components** (`/admin/config/customize/themes`) page to edit Sublime theme.
+Go to **Admin > Themes & components** (`/admin/config/customize/themes`) page to edit the theme.
 
-- in **Dark color palette** dropdown select `sublime-dark`
+- in **Dark color palette** dropdown select the theme's dark palette
 
-  ![theme dark color palette](/images/theme-dark-color-palette.webp)
+  ![theme dark color palette](images/theme-dark-color-palette.webp)
 
 ### Interface & layout
 
@@ -32,7 +26,7 @@ Go to **Admin > Interface & layout** (`/admin/config/interface`) page.
 
 Go to **Admin > Welcome banner** (`/admin/config/welcome-banner`) page.
 
-- in **Enabled on themes...** dropdown select `Sublime Theme`
+- in **Enabled on themes...** dropdown select this theme
 
   ![welcome banner themes](images/welcome-banner-enable.webp)
 

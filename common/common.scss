@@ -14,56 +14,21 @@
 }
 
 // =====================================================================
-//  Barbermonger - theme overrides
-//  Companion to the "Barbermonger Dark" colour scheme in about.json.
-// ---------------------------------------------------------------------
-//  The colour work now lives almost entirely in about.json. Because that
-//  file PINS the derived tints (the full primary ramp, the secondary
-//  tints, and the muted-text blends) to flat navy / flat dun values, it
-//  sets the SCSS source variables directly - so it fixes BOTH the baked
-//  styles and the var(--*) styles in one place. No tint chasing, no DOM
-//  walking.
-//
-//  This file is therefore reserved for the only two things a colour
-//  palette CANNOT express:
-//    1. Role reassignments  - making an element use a different role
-//                             than Discourse assigns it.
-//    2. Decorative tokens   - colours with no Discourse slot at all.
+// Barbermonger - theme overrides
 // =====================================================================
 
 :root {
-  // --- Decorative text-shadow colours (no palette slot) ----------------
-  // JCink used these as glows under accent text. Apply them in custom
-  // rules via text-shadow where you want the effect.
-  // Rule 0 (Round B): the legacy tokens ride the derived accent-kin shadows
-  // (clown home: warm ≈ the old blood-red; cool = teal-family, was berkeley).
+  // --- Decorative text-shadow colours (no palette slot)
   --color-quaternary-shadow: var(--bm-accent2-shadow, #5f1a07);
   --color-tertiary-shadow: var(--bm-accent-shadow, #053663);
   --content-border-color: var(--color-tertiary-shadow);
 }
 
-// --- Role reassignment: make link-like elements verdigris ------------
-// Discourse deliberately renders many clickable things in the TEXT colour
-// (primary), not the link colour. Reversing that is the one area the
-// palette can't reach - but it's a small, known set, not a DOM walk.
-// If any selector below misses (Discourse markup shifts between versions),
-// inspect the element, find the rule actually setting `color`, and send it
-// to me - that's how we nailed the category badges.
-
-// Category badges (titles + subcategory links).
-// The name uses `--category-badge-title-color: currentcolor`, so it
-// inherits from `.badge-category` (core sets that to --primary-high).
-// Recolour the badge and the name follows. NOTE: categories that have a
-// custom text colour set in their category settings will keep that colour.
+// --- Role reassignment: make link-like elements verdigris
 .badge-category__wrapper .badge-category {
   color: var(--tertiary);
 }
 
-// Usernames + mentions (they link to profiles).
-// Core colours these via `.names > span a` -> --primary-high-or-secondary-low
-// (a blend; pinning secondary-low in about.json does NOT reach it, so we
-// target the selector directly). Add `!important` if a group/staff flair
-// colour outranks this on certain users.
 .names > span a,
 a.username,
 a.mention,
@@ -71,8 +36,6 @@ a.mention,
   color: var(--tertiary);
 }
 
-// Flat / text buttons - post controls (reply, edit, link, share) and
-// topic footer. Targets icon + label. Trim if you want some left muted.
 .post-controls .btn-flat,
 .post-controls .btn-flat .d-icon,
 .topic-footer-buttons .btn-flat,
@@ -89,67 +52,27 @@ a.mention,
   color: var(--tertiary);
 }
 
-// Any spare text that should be primary
 .chat-message-separator-date .chat-message-separator__text {
   color: var(--primary);
 }
 
-// --- OPTIONAL: two-tone surfaces (JCink page vs box) -----------------
-// JCink had two independent background colours; Discourse has one
-// `secondary` + derived tints. If you want category boxes raised to the
-// space-cadet contrast tone like JCink, uncomment and confirm the
-// winning selector for your category style via DevTools.
-//
-// .category-boxes .category-box,
-// .category-list-item {
-//   background: #1d1e38; // space-cadet
-// }
-
-// =====================================================================
-//  REFERENCE - the logic for pinning, so you can pin any straggler
-//  yourself. Inspect an element, read the winning var(--x):
-//    * a SLOT (primary/secondary/tertiary/...) -> change it in about.json
-//    * a TINT (-low/-medium/-high, the numbered ramp, *-or-secondary-*)
-//      -> PIN it in about.json (it has a !default, so your value wins,
-//         and it reaches baked + var usages together)
-//    * a COMPONENT alias -> it points at a slot/tint; pin that instead
-//    * a ROLE you want changed (title=link) -> a rule here, like above
-//
-//  Find every variable + its resolved value (run in the JS console):
-//    const r = getComputedStyle(document.documentElement);
-//    [...document.styleSheets]
-//      .flatMap(s => { try { return [...s.cssRules] } catch { return [] } })
-//      .filter(x => x.selectorText && x.selectorText.includes(':root'))
-//      .flatMap(x => [...x.style].filter(p => p.startsWith('--')))
-//      .filter((v,i,a) => a.indexOf(v) === i).sort()
-//      .forEach(v => console.log(v, r.getPropertyValue(v).trim()));
-// =====================================================================
-
 :root {
+  --bm-chat-viewport-gap: 82px;
   --d-border-radius: var(--sublime-border-radius);
   --d-sidebar-admin-background: var(--bm-surface-2);
   --topic-list-item-background-color: var(--bm-surface-2);
   --heading-font-family: "Livvic", sans-serif;
   --font-family: "Atkinson Hyperlegible", NotoSans, Arial, sans-serif;
   --topic-list-item-background-color--visited: var(--bm-surface-2);
-  // --topic-list-item-background-color--visited: var(--primary-very-low);
 }
 
 #main-outlet-wrapper::after {
   background: none !important;
 }
 
-// Nav bar color (beta vote 2026-07-06) — see --bm-header-bar-bg in
-// color_definitions.scss. Slot untouched; bar only.
 .d-header {
   background-color: var(--bm-header-bar-bg, var(--header_background));
-  // RC-8: ink pairs with the constant bar, not the active palette's
-  // header_primary (see color_definitions).
   color: var(--bm-header-bar-ink, var(--header_primary));
-}
-
-html.has-full-page-chat body #main-outlet {
-  padding-bottom: unset !important;
 }
 
 body {
@@ -198,12 +121,6 @@ input[type="color"],
 .btn-danger,
 .alert.alert-info {
   border-radius: var(--sublime-border-radius);
-  // text-shadow:
-  //   1px 1px 2px #000,
-  //   -1px -1px 2px #000,
-  //   1px 2px 2px #000,
-  //   1px -1px 2px #000;
-  // color: var(--primary);
 }
 
 input[type="text"]:focus,
@@ -239,14 +156,10 @@ input[type="color"]:focus,
   box-shadow: none;
 }
 
-// Header icons follow header_primary — the one slot guaranteed by the
-// palette contract to contrast with header_background in every palette.
 .d-header .d-header-icons .d-icon {
   color: var(--header_primary);
 }
 
-// Display headings in topic/post view take the heading ink
-// (brick on light palettes, palette ink on dark — see color_definitions).
 #topic-title h1,
 #topic-title h1 a,
 .fancy-title,
@@ -261,50 +174,7 @@ input[type="color"]:focus,
   justify-self: center;
 }
 
-#custom-welcome-banner {
-  grid-area: banner;
-  box-sizing: border-box;
-  width: 100%;
-  margin: auto;
-
-  // Scheme-aware variant toggle (vars in color_definitions.scss).
-  .welcome-logo.light-mode-logo {
-    display: var(--bm-welcome-light-display, block);
-  }
-
-  .welcome-logo.dark-mode-logo {
-    display: var(--bm-welcome-dark-display, block);
-  }
-}
-
-body.has-full-page-chat #custom-welcome-banner,
-body.admin-interface #custom-welcome-banner {
-  display: none;
-}
-
-.inner-logo-area {
-  margin: 30px auto;
-}
-
-.welcome-logo {
-  width: 100%;
-  max-width: 1100px;
-  max-height: 300px;
-  margin: auto;
-  display: block;
-  object-fit: cover;
-}
-
-@media (max-width: 47.999rem) {
-  #main-outlet-wrapper {
-    grid-template-areas:
-      "banner"
-      "content"
-      "below-content";
-  }
-}
-
-//Main Container
+// Main Container
 body #main-outlet {
   background: var(--secondary);
 }
@@ -318,7 +188,7 @@ body:not(.has-full-page-chat) #main-outlet {
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
   max-width: 1150px;
-  padding-bottom: 5% !important; // overriding inline style
+  padding-bottom: 5% !important;
 
   @media screen and (width <= 700px) {
     padding: 1.5em;
@@ -338,35 +208,11 @@ body:not(.has-full-page-chat) #main-outlet {
   }
 }
 
-// // iOS Full Page Chat Fixes
-// html.ios-device.has-full-page-chat {
-//   body {
-//     height: 100vh !important;
-//     width: 100vw !important;
-//   }
-
-//   #main-outlet {
-//     height: 100% !important;
-//     max-height: 100% !important;
-//     overflow: hidden !important;
-//     padding: 0 !important;
-//     margin: 0 !important;
-//     border: none !important;
-//   }
-
-//   .full-page-chat {
-//     height: 100% !important;
-//     max-height: 100% !important;
-//   }
-// }
-
 // Inside Category Banner spacing
 .list-controls {
   margin-top: 15px;
 }
 
-// COPIED FROM DESKTOP
-// Category Boxes
 .category-boxes {
   display: grid;
   border-radius: var(--sublime-border-radius);
@@ -399,11 +245,6 @@ body:not(.has-full-page-chat) #main-outlet {
     padding-top: 10px;
     color: var(--category-box-font-color);
   }
-}
-
-// Mobile Chat specific fixes
-html.has-full-page-chat.mobile-view #main-outlet {
-  width: 100%;
 }
 
 // Edit Category Page
@@ -448,12 +289,6 @@ div.edit-category .edit-category-title-bar {
   filter: var(--theme__title-dropshadow);
 }
 
-// Category Title Header (discourse-category-banners component)
-// Beta decision 2026-07-05: neutral third-surface bg + dotted quaternary
-// rule echoing the site header — replaces the category-color background,
-// which was unmatchable across palettes. !important beats the component's
-// inline category colors. Category icons keep their own colors (they're
-// colored by explicit per-category rules, not currentColor from here).
 div[class^="category-title-header"] {
   border-radius: var(--sublime-border-radius) var(--sublime-border-radius) 0 0;
   margin-bottom: 10px;
@@ -461,19 +296,12 @@ div[class^="category-title-header"] {
   color: var(--primary) !important;
   border-bottom: 5px dotted var(--quaternary);
 
-  // Neutral surface, so headings take the normal heading ink (rule 4 no
-  // longer applies — this is not a brand-colored background anymore).
   h1,
   h2,
   h3 {
     color: var(--bm-heading-ink, var(--primary));
     text-shadow: none;
 
-    // Category icon scales with the heading instead of staying body-sized.
-    // Needs the full badge chain: the category-banners component pins
-    // .75em at (0,4,1) and core badges.scss pins emoji .74em at (0,4,0) —
-    // this selector is (0,4,2), so it outranks both. Covers icon-style
-    // categories (svg.d-icon) and custom-emoji ones (img.emoji).
     .badge-category__wrapper .badge-category {
       .d-icon,
       .emoji {
@@ -483,15 +311,6 @@ div[class^="category-title-header"] {
       }
     }
   }
-}
-
-// Onebox link cards (beta ask 2026-07-06, both themes / all palettes):
-// core gives them NO background and a primary-300 hairline — they melted
-// into every surface. Card surface + a real ring; the semantic var makes
-// this palette-proof.
-aside.onebox {
-  background: var(--bm-surface-2, var(--secondary));
-  --onebox-border-color: var(--primary-medium);
 }
 
 .topic-list-body {
@@ -534,14 +353,6 @@ aside.onebox {
   overflow-y: scroll;
   max-height: 500px;
 }
-
-// More Topics
-// .more-topics__container {
-//   margin-top: 50px;
-//   background: var(--header_background);
-//   border-radius: var(--sublime-border-radius);
-//   padding-top: 20px;
-// }
 
 .more-topics__container .more-topics__list-title,
 .more-topics__container .more-topics__browse-more {
@@ -600,7 +411,6 @@ img.emoji.only-emoji {
   background: var(--quaternary);
 }
 
-/* Hide likes from user summary/profiles */
 .top-section.most-liked-section {
   display: none;
 }
@@ -613,12 +423,10 @@ img.emoji.only-emoji {
   display: none;
 }
 
-/* Hide likes given from user activity navigation */
 .user-nav__activity-likes {
   display: none;
 }
 
-/* Hide likes received from user notifications navigation */
 .user-nav__notifications-likes {
   display: none;
 }
@@ -628,16 +436,9 @@ img.emoji.only-emoji {
   display: none;
 }
 
-/* ==========================================================================
-   TOPIC TAGS = W3 "stamp" (chip/tag unification, Luna 2026-07-09).
-   One language with .bm-chip / the directory filter chips: quiet flat
-   fill + hairline, ink text; accent only on hover. Tag names stay
-   lowercase-dasherized (Luna's casing pick — as-is).
-   a.discourse-tag.box = (0,2,1): beats core's box styling AND horizon's
-   .hc-topic-card__tags .discourse-tag (0,2,0) pin at any load order.
-   Sizing/padding deliberately NOT set — each context (topic card, thread
-   title, tags page) keeps its own scale.
-   ========================================================================== */
+// =====================================================================
+// TOPIC TAGS = "stamp" chips
+// =====================================================================
 a.discourse-tag.box {
   background: var(--primary-very-low);
   border: 1px solid var(--primary-low-mid);
@@ -647,7 +448,6 @@ a.discourse-tag.box {
   &:hover,
   &:focus-visible {
     background: var(--tertiary);
-    // Brand-colored surface: mode-invariant cream + dark outline.
     color: var(--bm-ribbon-text, #d4be9f);
     text-shadow: var(
       --bm-brand-text-outline,
@@ -657,60 +457,4 @@ a.discourse-tag.box {
       1px -1px 2px #000
     );
   }
-}
-
-/* ==========================================================================
-   CATEGORY BANNER — mobile overflow guard (all three themes, 2026-07-09).
-   Root cause: core renders the banner title as ONE nowrap category badge
-   inside a flex h1; nothing in the chain (flex min-width:auto + the
-   component's content-box .category-title-contents) can shrink below the
-   full title line, so long titles (NSFW One-On-One Search) blow the banner
-   out of the outlet on narrow screens. Structural guard only — no visual
-   change on desktop (the component's 500px cap survives via min()).
-   ========================================================================== */
-div[class^="category-title-header"] .category-title-contents {
-  max-width: min(500px, 100%);
-  box-sizing: border-box;
-  min-width: 0;
-}
-
-div[class^="category-title-header"] h1 {
-  min-width: 0;
-}
-
-div[class^="category-title-header"] .badge-category__wrapper,
-div[class^="category-title-header"] .badge-category__name {
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-
-/* ==========================================================================
-   CHAT — hover/consecutive-message timestamps (Luna 2026-07-09): core
-   paints them with --secondary-medium, a PAGE-side tint that's near-
-   invisible on our hand-pinned ramps (#2a2c45 on the navy page). Muted
-   TEXT-side ink instead. Selectors mirror core's + body — the chat
-   plugin's CSS is a lazily-appended body stylesheet, so exceed, never tie.
-   ========================================================================== */
-body .chat-message-container:hover .chat-message-left-gutter .chat-time,
-body .chat-message-container.-user-info-hidden .chat-time {
-  color: var(--primary-medium);
-}
-
-// Layer-2 fix (Luna's bmonger-palette walk, 2026-07-10): the category-port
-// letters subforum pills with --bm-ribbon-text, which is guarded against the
-// QUATERNARY ribbon fill — but the pills sit on the TERTIARY button fill, so
-// foreign palettes could resolve an unreadable pairing. Repoint to the
-// button-family ink (guarded highlight vs tertiary; the pill's own 4-way
-// #000 outline carries the brand-low cases). #main-outlet outranks the
-// component's bare .subforum-link !important at any load order.
-#main-outlet .subforum-link {
-  color: var(--bm-btn-ink, var(--bm-ribbon-text, #d4be9f)) !important;
-  // Outline only with bright ink (see --bm-btn-text-outline).
-  text-shadow: var(
-    --bm-btn-text-outline,
-    1px 1px 2px #000,
-    -1px -1px 2px #000,
-    1px 2px 2px #000,
-    1px -1px 2px #000
-  ) !important;
 }
