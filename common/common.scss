@@ -289,6 +289,10 @@ div.edit-category .edit-category-title-bar {
   filter: var(--theme__title-dropshadow);
 }
 
+.review-item__header .btn-transparent .d-icon {
+  filter: none;
+}
+
 div[class^="category-title-header"] {
   border-radius: var(--sublime-border-radius) var(--sublime-border-radius) 0 0;
   margin-bottom: 10px;
@@ -409,31 +413,6 @@ img.emoji.only-emoji {
 .badge-notification.new-topic::before,
 .badge-notification.new-replies::before {
   background: var(--quaternary);
-}
-
-.top-section.most-liked-section {
-  display: none;
-}
-.stats-likes-given,
-.stats-likes-received {
-  display: none;
-}
-.top-section .replies-section,
-.top-section .topics-section {
-  display: none;
-}
-
-.user-nav__activity-likes {
-  display: none;
-}
-
-.user-nav__notifications-likes {
-  display: none;
-}
-
-/* Hide likes on about page */
-.about__activities-item.likes {
-  display: none;
 }
 
 // =====================================================================
