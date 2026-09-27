@@ -7,7 +7,7 @@
   "about_url": "https://meta.discourse.org/t/discourse-sublime-theme/242048",
   "license_url": "https://github.com/discourse/discourse-sublime-theme/blob/main/LICENSE",
   "color_schemes": {
-    "clown-light": {
+    "Clown Light": {
       "primary": "3a3126",
       "secondary": "efddc0",
       "tertiary": "ec5d37",
@@ -43,7 +43,7 @@
       "primary-med-or-secondary-high": "54483a",
       "primary-med-or-secondary-med": "6d5f49"
     },
-    "clown-dark": {
+    "Clown Dark": {
       "primary": "d4be9f",
       "secondary": "121325",
       "tertiary": "0da9b1",
@@ -62,6 +62,7 @@
       "primary-low-mid": "2a2c45",
       "primary-medium": "b09c78",
       "primary-high": "c8b594",
+      "primary-high-or-secondary-low": "c8b594",
       "primary-very-high": "d4be9f",
       "primary-50": "161728",
       "primary-100": "191a2d",

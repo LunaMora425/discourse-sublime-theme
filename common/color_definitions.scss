@@ -70,12 +70,53 @@ $bm-cool-glow: if(
   @return $secondary;
 }
 
+// DARK-ACCENT GUARD (2026-08-28, Resistance Light): a LIGHT palette whose
+// tertiary is a dark fill (Ellipsus Resistance's brown 4a3725, brt 58).
+// Such a palette wants filled brand chrome: brown buttons/dropdowns with
+// light lettering, cream header icons, ribbon lettering in the link ink,
+// and its $highlight is the sage GROUND (backdrop + list surfaces), not a
+// lettering cream. Home light tertiaries: clown/bmonger orange 135, wiki
+// blue 98 -> never fires; dark palettes excluded by the light test.
+$bm-dark-accent: dc-color-brightness($primary) < dc-color-brightness($secondary) and
+  dc-color-brightness($tertiary) < 70;
+
+// the light-side accent ink (links, read titles; also the dark-accent
+// ribbon lettering) -- bright tertiaries darken, dim ones pass raw.
+$bm-accent-ink-light: if(
+  dc-color-brightness($tertiary) > 120,
+  scale-color($tertiary, $lightness: -35%),
+  $tertiary
+);
+
 $bm-btn-ink-val: if(
-  bm-abs(dc-color-brightness($highlight) - dc-color-brightness($tertiary)) <
+  $bm-dark-accent or
+    bm-abs(dc-color-brightness($highlight) - dc-color-brightness($tertiary)) <
     60,
   bm-ink-for($tertiary),
   $highlight
 );
+
+$bm-quiet-loud: bm-abs(
+    dc-color-brightness($quaternary) - dc-color-brightness($secondary)
+  ) <
+  40 and
+  dc-color-brightness($tertiary) >=
+  110;
+
+
+// accent-shadow: the matching hard-shadow/border kin of the accent.
+// GLOW GATE (2026-08-25, radioactive): a bright tertiary's -45% kin can
+// still land bright (mint 9ff4c1 -> 17c75d, brt 134) -- a "shadow" at
+// brightness >= 110 reads as a glow, not a shadow. Snap to the resting
+// border step (Luna: "same color as the other borders"). All eight other
+// palettes' kins sit at 34.6-88.8 -- byte-identical by the gate.
+$bm-accent-shadow-val: dark-light-choose(
+  scale-color($tertiary, $lightness: -65%),
+  scale-color($tertiary, $lightness: -45%)
+);
+@if dc-color-brightness($bm-accent-shadow-val) >= 110 {
+  $bm-accent-shadow-val: $primary-low-mid;
+}
 
 @function bm-surface-or($candidate, $page, $fallback) {
   $d: dc-color-brightness($candidate) - dc-color-brightness($page);
@@ -109,42 +150,67 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
     )};
   --theme__title-dropshadow: #{dark-light-choose(none, $bm-warm-drop-glow)};
   --bm-accent-ink: #{dark-light-choose(
+      $bm-accent-ink-light,
       if(
-        dc-color-brightness($tertiary) > 120,
-        scale-color($tertiary, $lightness: -35%),
+        dc-color-brightness($tertiary) < 110,
+        $highlight,
         $tertiary
-      ),
-      $tertiary
+      )
     )};
 
   --d-link-color: var(--bm-accent-ink);
+  --bm-nav-hover-ink: #{dark-light-choose(
+      $tertiary,
+      if(dc-color-brightness($tertiary) < 110, $highlight, $tertiary)
+    )};
   --title-color--read: var(--bm-accent-ink);
 
   // ---------------------------------------------------------------------
   // Barbermonger semantic layer
   // ---------------------------------------------------------------------
-  --bm-surface-2: #{dark-light-choose(
-      mix(#fff, $secondary, 30%),
-      $header_background
-    )};
+  // 2026-08-28 (Resistance Light): cards take header_background on BOTH
+  // sides. The old light-side mix(#fff, $secondary, 30%) is byte-identical
+  // to Clown Light's header_background (f4e7d3); Ellipsus Resistance paints
+  // folders (quaternary sage) and doc cards (tan) as distinct surfaces, and
+  // header_background is the palette's card-worthy step by contract.
+  --bm-surface-2: #{$header_background};
 
   --bm-ribbon-bg: #{$quaternary};
   --bm-ribbon-text: #{if(
-      bm-abs(
-          dc-color-brightness($highlight) - dc-color-brightness($quaternary)
-        ) <
-        60,
-      bm-ink-for($quaternary),
-      $highlight
+      $bm-dark-accent,
+      $bm-accent-ink-light,
+      if(
+        bm-abs(
+            dc-color-brightness($highlight) - dc-color-brightness($quaternary)
+          ) <
+          60,
+        bm-ink-for($quaternary),
+        $highlight
+      )
     )};
   --bm-ribbon-shadow: #{$bm-warm-glow};
+  --bm-ribbon-fold-strong: #{if(
+      dc-color-brightness($quaternary) < 60,
+      rgba(255, 255, 255, 0.3),
+      rgba(0, 0, 0, 0.533)
+    )};
+  --bm-ribbon-fold: #{if(
+      dc-color-brightness($quaternary) < 60,
+      rgba(255, 255, 255, 0.15),
+      rgba(0, 0, 0, 0.267)
+    )};
 
   --bm-heading-ink: #{dark-light-choose("var(--bm-accent-ink)", $primary)};
 
-  --bm-accent-shadow: #{dark-light-choose(
-      scale-color($tertiary, $lightness: -65%),
-      scale-color($tertiary, $lightness: -45%)
+  // card label ink: the profile port's quaternary user-card labels; a
+  // surface-dark quaternary (wasteland) rescues to lightened highlight.
+  --bm-card-label-ink: #{if(
+      dc-color-brightness($quaternary) < 60,
+      scale-color($highlight, $lightness: 30%),
+      $quaternary
     )};
+
+  --bm-accent-shadow: #{$bm-accent-shadow-val};
 
   --bm-banner-bg: #{$quaternary};
   --bm-banner-ink: #{dark-light-choose(
@@ -174,7 +240,11 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
       "1px 1px 2px #000, -1px -1px 2px #000, 1px 2px 2px #000, 1px -1px 2px #000"
     )};
   --bm-btn-hover-bg: #{dark-light-choose($quaternary, $tertiary)};
-  --bm-btn-hover-ink: #{$quaternary};
+  --bm-btn-hover-ink: #{if(
+      dc-color-brightness($quaternary) < 60,
+      scale-color($highlight, $lightness: 30%),
+      $quaternary
+    )};
 
   --bm-seeking-icon: #{dark-light-choose(
       $quaternary,
@@ -188,13 +258,17 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
 
   --bm-header-bar-ink: #{dark-light-choose(
       if(
-        bm-abs(
-            dc-color-brightness($header_primary) -
-              dc-color-brightness($tertiary)
-          ) >=
-          90,
-        $header_primary,
-        bm-ink-for($tertiary)
+        $bm-dark-accent,
+        bm-ink-for($tertiary),
+        if(
+          bm-abs(
+              dc-color-brightness($header_primary) -
+                dc-color-brightness($tertiary)
+            ) >=
+            90,
+          $header_primary,
+          bm-ink-for($tertiary)
+        )
       ),
       $header_primary
     )};
@@ -205,9 +279,29 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
     )};
 
   --bm-page-backdrop: #{dark-light-choose(
-      mix($quaternary, #fff, 55%),
+      if($bm-dark-accent, $highlight, mix($quaternary, #fff, 55%)),
       $secondary
     )};
+
+  // GROUND (2026-08-28, Resistance Light): the LIST surface -- category
+  // view, topic lists, chat channel sidebar (Ellipsus's sage dashboard
+  // behind its folders/cards). Dark-accent palettes carry it in $highlight;
+  // everywhere else it is the page itself (consumers fall back to page).
+  --bm-ground: #{dark-light-choose(
+      if($bm-dark-accent, $highlight, $secondary),
+      $secondary
+    )};
+
+  // PAPER = the page on every palette (Luna 2026-08-28: the unguarded
+  // light-side $highlight tinted Clown Light's topic view orange). Kept as
+  // a variable so the consumer stays a single seam.
+  --bm-paper: #{$secondary};
+
+  // TIMELINE (theme-wide, Luna 2026-08-28): core's tertiary-400 handle and
+  // tertiary-low track wash out on paper pages -- handle = the accent,
+  // track = the hairline step, on every palette
+  --topic-timeline-handle-color: #{$tertiary};
+  --topic-timeline-border-color: var(--primary-low-mid);
 
   --bm-text-outline: #{dark-light-choose(
       none,
@@ -221,6 +315,9 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
 
   // ---------------------------------------------------------------------
   // RP resource card graphics (theme-bound)
+  // asset rev 1 — bump this number in a SEPARATE sync AFTER replaced images
+  // land (same-sync bumps race the field save and can bake an "undefined
+  // variable" error); the cache digest tracks this TEXT, not upload contents
   // ---------------------------------------------------------------------
   --bm-gfx-talk-show: url(#{dark-light-choose($rp_talk_show_light, $rp_talk_show_dark)});
   --bm-gfx-internet-safety: url(#{dark-light-choose($rp_internet_safety_light, $rp_internet_safety_dark)});
@@ -228,4 +325,134 @@ $bg-img: #{dark-light-choose($bg_light, $bg_dark)};
   --bm-gfx-ad-guide: url(#{dark-light-choose($rp_ad_guide_light, $rp_ad_guide_dark)});
   --bm-gfx-rp-index: url(#{dark-light-choose($rp_index_light, $rp_index_dark)});
   --bm-gfx-help-series: url(#{dark-light-choose($rp_help_series_light, $rp_help_series_dark)});
+
+  // ---------------------------------------------------------------------
+  // Quiet-band + loud-accent trigger (round lil2, 2026-08-25 -- lilium):
+  // a page-toned quaternary (|brt(quat) - brt(page)| < 40, the wasteland/
+  // lilium quiet band) PLUS a bright tertiary (>= 110). Such a palette
+  // wears its resting card border in primary-low-mid (real-Lilium cards:
+  // 5px solid border-tertiary #214f4f; the aqua is their SELECTION outline
+  // -- Luna's corrected ruling 08-25) and escalates the contact/seeking
+  // furniture to the action accent (their real primary button). Vars are
+  // emitted ONLY when the trigger fires; every other palette keeps its
+  // exact current output through the consumers' fallback chains. No-op
+  // proof: wasteland's tertiary sits at brt 65 (dim -- blocked); the six
+  // home quaternaries all sit >= 70 brightness from their pages.
+  // ---------------------------------------------------------------------
+  @if $bm-quiet-loud {
+    --bm-frame-ink: #{$primary-low-mid};
+    --bm-seek-bg: #{$tertiary};
+    --bm-seek-ink: #{bm-ink-for($tertiary)};
+    --bm-seek-border: #{scale-color($tertiary, $lightness: -45%)};
+    --bm-seek-text-outline: none;
+    --bm-seeking-icon: #{scale-color($tertiary, $lightness: -65%)};
+  }
+}
+
+// DARK-ACCENT chrome (2026-08-28, Resistance Light). ONLY variables live
+// here: this sheet loads BEFORE core + theme CSS, so selector rules from
+// it lose the cascade on the live site (they only "worked" under body-end
+// preview injection). Consumers with home-exact fallbacks sit in
+// common.scss / desktop.scss. Core's modernize-foundation sets its button
+// vars on BODY via :where() (zero specificity) and the chat plugin sets its
+// input vars on :root after us -- declare on body.
+@if $bm-dark-accent {
+  body {
+    // every default/primary button = the brand fill with light lettering
+    --d-button-default-bg-color: #{$tertiary};
+    --d-button-default-bg-color--hover: var(--tertiary-hover);
+    --d-button-default-text-color: #{$bm-btn-ink-val};
+    --d-button-default-text-color--hover: #{$bm-btn-ink-val};
+    --d-button-default-icon-color: #{$bm-btn-ink-val};
+    --d-button-default-icon-color--hover: #{$bm-btn-ink-val};
+    --d-button-default-border: 1px solid #{$tertiary};
+    --d-button-default-border--hover: 1px solid var(--tertiary-hover);
+    --d-button-primary-text-color: #{$bm-btn-ink-val};
+    --d-button-primary-text-color--hover: #{$bm-btn-ink-val};
+    --d-button-primary-icon-color: #{$bm-btn-ink-val};
+    --d-button-primary-icon-color--hover: #{$bm-btn-ink-val};
+    // flat/transparent buttons carry no fill: page ink, not the lettering
+    --d-button-flat-text-color: #{$primary};
+    --d-button-flat-text-color--hover: #{$primary};
+    --d-button-flat-icon-color: #{$primary};
+    --d-button-flat-icon-color--hover: #{$primary};
+    // chat composer = floating bar on the card step, no border, shadow
+    --d-chat-input-bg-color: #{$header_background};
+    --d-chat-input-border-color: transparent;
+    // hamburger/sidebar panels + their footer on the card step
+    --d-sidebar-background: #{$header_background};
+    --d-sidebar-footer-fade: #{$header_background};
+    // consumed by WTTI common.scss / desktop.scss (fallbacks = home)
+    // core sidebar/hamburger links derive their own brown from the ink;
+    // menus read in the page ink here (Luna: not brown)
+    --d-sidebar-link-color: #{$primary};
+    --d-sidebar-link-icon-color: #{$primary};
+    --d-sidebar-header-color: #{$primary};
+    // header icons + docked topic title: cream on the brown bar, hover =
+    // Ellipsus's lighter-brown button hover, still cream
+    --d-header-icon-color: var(--bm-header-bar-ink);
+    --d-header-icon-color--hover: var(--bm-header-bar-ink);
+    --d-header-icon-color--active: var(--bm-header-bar-ink);
+    --d-header-icon-background--hover: var(--tertiary-hover);
+    --title-color--header: var(--bm-header-bar-ink);
+    --bm-nav-active-ink: #{$bm-btn-ink-val};
+    --bm-header-icon-ink: var(--bm-header-bar-ink);
+    --d-header-icon-background--active: var(--tertiary-hover);
+    // bm-chat-upgrade tabs (Channels / DMs / Browse)
+    --bm-chat-tab-bg: #{$tertiary};
+    --bm-chat-tab-active-bg: var(--tertiary-hover);
+    --bm-chat-tab-hover-bg: var(--tertiary-hover);
+    --bm-chat-tab-ink: #{$bm-btn-ink-val};
+    --bm-notif-icon-ink: #{$bm-btn-ink-val};
+    --bm-menu-panel-bg: #{$header_background};
+    --bm-menu-item-ink: #{$primary};
+    --bm-flat-btn-ink: #{$primary};
+    --bm-chat-row-active-bg: #{$header_background};
+    --bm-menu-panel-ink: #{$primary};
+    --bm-dropdown-bg: #{$tertiary};
+    --bm-dropdown-ink: #{$bm-btn-ink-val};
+    --bm-newpill-ink: #{$bm-btn-ink-val};
+    --bm-chat-navbar-bg: #{$header_background};
+    --bm-chat-main-bg: #{$secondary};
+    // chat jump-to-bottom pill: brand fill, lettering (core: primary-medium
+    // + WTTI's tertiary flat-icon rule = brown on grey-green)
+    --bm-jump-bg: #{$tertiary};
+    --bm-jump-ink: #{$bm-btn-ink-val};
+    // WTTI paints every flat-button icon tertiary (brown on paper is fine;
+    // brown on brown fills is not) -- page ink here
+    --bm-flat-icon-ink: #{$primary};
+    // seek/contact furniture + labels: the :root pairings ride $highlight /
+    // $quaternary as INK (now the ground / the folder sage) -- re-pin
+    --bm-seek-ink: #{$bm-btn-ink-val};
+    --bm-seeking-icon: #{$bm-btn-ink-val};
+    --bm-banner-ink: #{$bm-btn-ink-val};
+    // link hover (category-port names/last-posts, profile links) = DARKER
+    // than the brown link ink (Luna); filled pills keep the cream on hover
+    --bm-btn-hover-ink: #{$primary};
+    --bm-fill-hover-ink: #{$bm-btn-ink-val};
+    --bm-dropdown-hover-bg: var(--tertiary-hover);
+    --bm-card-label-ink: #{$primary-medium};
+    --bm-tag-hover-ink: #{$bm-btn-ink-val};
+    // jcink-user-profile-port: identity box on the card step, link-button
+    // icons in the lettering
+    --bm-profile-details-bg: #{$header_background};
+    --bm-links-icon-ink: #{$bm-btn-ink-val};
+    --bm-chat-composer-shadow:
+      0 2px 14px rgba(0, 0, 0, 0.08),
+      0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+}
+
+// DARK-SIDE JUMP PILL (2026-09-20, user report): on a dark palette none of
+// the --bm-jump-* slots are set (the guard above is light-only), so the
+// chat jump-to-bottom pill keeps core's --primary-medium fill while WTTI's
+// blanket `.btn-flat .d-icon` rule paints the arrow --tertiary. Clown Dark
+// lands teal 0da9b1 on the tan mid step: ~1.4:1, unreadable. Hand the ink
+// slot core's own pairing instead -- the page ground, picked by brightness
+// so a palette whose primary-medium leans dark still gets the light ink.
+// (Fill left to core; the light-side brand fill stays a dark-accent thing.)
+@if dc-color-brightness($primary) > dc-color-brightness($secondary) {
+  body {
+    --bm-jump-ink: #{bm-ink-for($primary-medium)};
+  }
 }

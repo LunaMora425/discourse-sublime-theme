@@ -43,7 +43,7 @@ body #main-outlet {
   margin-top: 30px;
   margin-bottom: 50px;
   background: var(--secondary);
-  border: 5px dotted var(--tertiary);
+  border: 5px dotted var(--bm-frame-ink, var(--tertiary));
   border-radius: var(--sublime-border-radius);
   width: 100%;
   box-sizing: border-box;
@@ -90,18 +90,18 @@ body.has-full-page-chat #main-outlet {
     border-radius: var(--sublime-border-radius);
     transition: all 0.3s linear;
     background-color: transparent;
-    color: var(--tertiary);
-    border: 1px dashed var(--tertiary);
+    color: var(--bm-nav-hover-ink, var(--tertiary));
+    border: 1px dashed var(--bm-frame-ink, var(--tertiary));
   }
 
   &.active {
     border-radius: var(--sublime-border-radius);
     transition: all 0.3s linear;
-    color: var(--secondary);
+    color: var(--bm-nav-active-ink, var(--secondary));
     background: var(--tertiary);
 
     .d-icon {
-      color: var(--secondary);
+      color: var(--bm-nav-active-ink, var(--secondary));
     }
   }
 }

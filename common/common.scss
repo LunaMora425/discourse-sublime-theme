@@ -21,7 +21,7 @@
   // --- Decorative text-shadow colours (no palette slot)
   --color-quaternary-shadow: var(--bm-accent2-shadow, #5f1a07);
   --color-tertiary-shadow: var(--bm-accent-shadow, #053663);
-  --content-border-color: var(--color-tertiary-shadow);
+  --content-border-color: var(--bm-frame-ink, var(--color-tertiary-shadow));
 }
 
 // --- Role reassignment: make link-like elements verdigris
@@ -42,7 +42,7 @@ a.mention,
 .topic-footer-buttons .btn-flat .d-icon,
 .btn-flat .d-icon,
 .small-action .topic-avatar .d-icon {
-  color: var(--tertiary);
+  color: var(--bm-flat-icon-ink, var(--tertiary));
 }
 
 // Topic-list titles
@@ -184,7 +184,7 @@ body:not(.has-full-page-chat) #main-outlet {
   margin-top: 30px;
   margin-bottom: 50px;
   background: var(--secondary);
-  border: 5px dotted var(--tertiary);
+  border: 5px dotted var(--bm-frame-ink, var(--tertiary));
   border-radius: var(--sublime-border-radius);
   padding: 3em 3em 5%;
   max-width: 1150px;
@@ -203,9 +203,15 @@ body:not(.has-full-page-chat) #main-outlet {
     width: 85%;
   }
 
-  .archetype-regular & {
-    min-height: 500px;
-  }
+}
+
+// Topic/post view sits on PAPER (2026-08-28, Resistance Light) -- light
+// palettes read it from $highlight, dark palettes keep the page. (The old
+// nested `.archetype-regular &` compiled to `.archetype-regular body ...`
+// and never matched; its min-height moved here.)
+body.archetype-regular:not(.has-full-page-chat) #main-outlet {
+  min-height: 500px;
+  background: var(--bm-paper, var(--secondary));
 }
 
 // Inside Category Banner spacing
@@ -436,4 +442,197 @@ a.discourse-tag.box {
       1px -1px 2px #000
     );
   }
+}
+
+// ---------------------------------------------------------------------
+// DARK-ACCENT consumers (2026-08-28, Resistance Light). The cds defines
+// the --bm-* vars below ONLY on dark-accent palettes; every fallback is
+// the home behaviour, so the other palettes are byte-identical.
+// ---------------------------------------------------------------------
+
+// GROUND: list surfaces (category view, topic lists, chat channel list)
+body.categories-list:not(.has-full-page-chat) #main-outlet,
+body.navigation-categories:not(.has-full-page-chat) #main-outlet,
+body.navigation-topics:not(.has-full-page-chat) #main-outlet,
+body.category:not(.archetype-regular):not(.has-full-page-chat) #main-outlet,
+body.tags-page:not(.has-full-page-chat) #main-outlet {
+  background: var(--bm-ground, var(--secondary));
+}
+.has-full-page-chat:not(.discourse-sidebar) .full-page-chat .channels-list {
+  background: var(--bm-ground, var(--secondary));
+}
+.has-full-page-chat:not(.discourse-sidebar)
+  .full-page-chat
+  .channels-list
+  .chat-channel-row.active {
+  background: var(--bm-chat-row-active-bg, var(--primary-low));
+}
+
+// WTTI (all palettes, Luna 2026-08-28): the selected / hovered channel row
+// takes the theme radius -- the square slab was too harsh
+.has-full-page-chat:not(.discourse-sidebar)
+  .full-page-chat
+  .channels-list
+  .chat-channel-row {
+  border-radius: var(--sublime-border-radius);
+}
+
+.d-header .icons .d-icon,
+.d-header .icons .btn {
+  color: var(--bm-header-icon-ink, var(--header_primary));
+}
+
+// core paints notification-level icons with primary-high regardless of
+// the button they sit in
+.btn .d-icon.d-icon-d-regular,
+.btn .d-icon.d-icon-d-muted,
+.btn .d-icon.d-icon-d-watching-first,
+.btn .d-icon.d-icon-d-watching-first-post {
+  color: var(--bm-notif-icon-ink, var(--primary-high));
+}
+
+.btn .d-icon.d-icon-d-tracking,
+.btn .d-icon.d-icon-d-unread,
+.btn .d-icon.d-icon-d-watching {
+  color: var(--bm-notif-icon-ink, var(--tertiary));
+}
+
+// core's flat / transparent / dropdown-item buttons keep the DEFAULT text
+// var while dropping the fill -- on a filled-chrome palette that is the
+// lettering cream on the page. They read in the page ink instead.
+.btn-flat {
+  color: var(--bm-flat-btn-ink, var(--d-button-default-text-color));
+}
+.btn-transparent {
+  color: var(--bm-flat-btn-ink, var(--d-button-transparent-text-color));
+}
+.dropdown-menu__item .btn {
+  color: var(--bm-menu-item-ink, var(--d-button-default-text-color));
+  .d-icon {
+    color: var(--bm-menu-item-ink, var(--d-button-default-icon-color));
+  }
+}
+.fk-d-menu__inner-content {
+  background-color: var(--bm-menu-panel-bg, var(--secondary));
+}
+
+// docked topic title in the header bar: status icons + category badge
+.d-header .extra-info .topic-statuses .d-icon {
+  color: var(--bm-header-icon-ink, var(--header_primary-medium));
+}
+.d-header .extra-info .badge-category__name {
+  color: var(--bm-header-icon-ink, var(--category-badge-title-color));
+}
+
+// full-page chat: the outlet ring around the panes reads as the ground
+body.has-full-page-chat #main-outlet {
+  background: var(--bm-ground, var(--secondary));
+}
+.has-full-page-chat .main-chat-outlet {
+  background: var(--bm-chat-main-bg, transparent);
+}
+
+// menu panels (user menu, hamburger): card surface, page ink, page-ink links
+.menu-panel .sidebar-footer-wrapper .sidebar-footer-container,
+.hamburger-panel .revamped .sidebar-footer-wrapper .sidebar-footer-container {
+  background: var(--bm-menu-panel-bg, var(--secondary));
+  // the fade above the footer is a gradient TO the page color in core
+  &::before {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      var(--bm-menu-panel-bg, rgb(var(--secondary-rgb), 1))
+    );
+  }
+}
+// the footer's theme switcher is a combo-box core strips the fill from
+.sidebar-theme-toggle-dropdown.select-kit.combo-box .select-kit-header {
+  background: var(--bm-dropdown-bg, transparent);
+  &:hover {
+    background: var(--bm-dropdown-hover-bg, var(--bm-dropdown-bg, transparent));
+  }
+}
+.sidebar-theme-toggle__wrapper
+  .select-kit.single-select
+  .select-kit-header:not(.btn):hover,
+.sidebar-theme-toggle__wrapper
+  .select-kit.single-select
+  .select-kit-header:not(.btn):focus {
+  background: var(--bm-dropdown-hover-bg, var(--d-sidebar-highlight-background));
+}
+.sidebar-theme-toggle__wrapper > .d-icon {
+  color: var(--bm-dropdown-ink, var(--primary-medium));
+}
+
+// filled pills that hover-swap only their INK (category-port subforum
+// pills, profile link buttons) -- the link-hover ink must not land on a fill
+#main-outlet .subforum-link:hover {
+  color: var(--bm-fill-hover-ink, var(--bm-btn-hover-ink, var(--quaternary))) !important;
+}
+#main-outlet .bm-profile-links__button:hover {
+  color: var(--bm-fill-hover-ink, var(--bm-btn-hover-ink, var(--quaternary)));
+}
+.menu-panel {
+  background-color: var(--bm-menu-panel-bg, var(--secondary));
+  color: var(--bm-menu-panel-ink, inherit);
+  --d-link-color: var(--bm-menu-panel-ink, var(--bm-accent-ink));
+  a,
+  .btn-flat {
+    color: var(--bm-menu-panel-ink, var(--d-link-color));
+  }
+}
+
+// dropdowns (select-kit combo-box headers: breadcrumb category/tag drops,
+// chat channel settings, composer pickers)
+.select-kit.combo-box .select-kit-header,
+.select-kit.combo-box.category-drop .category-drop-header[data-value],
+.select-kit.combo-box.tag-drop .tag-drop-header[data-value],
+.list-controls .combo-box .combo-box-header {
+  background: var(--bm-dropdown-bg, var(--secondary));
+  border-color: var(--bm-dropdown-bg, var(--primary-low));
+  color: var(--bm-dropdown-ink, var(--primary));
+  .selected-name,
+  .name,
+  .d-icon {
+    color: var(--bm-dropdown-ink, inherit);
+  }
+  .badge-category__name {
+    color: var(--bm-dropdown-ink, var(--category-badge-title-color));
+  }
+}
+
+// core's modernized foundation repaints an EXPANDED / focused single-select
+// header with primary-100 (the tan step) -- the open dropdown loses its fill
+.select-kit.single-select.is-expanded .select-kit-header:not(.btn),
+.select-kit.single-select .select-kit-header:not(.btn):focus {
+  background: var(--bm-dropdown-hover-bg, var(--primary-100));
+}
+
+// the category-port "new!" pill rides --bm-ribbon-text (black outline
+// wants LIGHT lettering; the dark-accent ribbon ink is the link brown)
+#main-outlet .new-post-macro {
+  color: var(--bm-newpill-ink, var(--bm-ribbon-text, #d4be9f));
+}
+
+// chat jump-to-bottom pill
+.chat-scroll-to-bottom__button {
+  background: var(--bm-jump-bg, var(--primary-medium));
+  .d-icon {
+    color: var(--bm-jump-ink, var(--bm-flat-icon-ink, var(--tertiary)));
+  }
+}
+
+// high-context card tag chips on hover (component paints --bm-ribbon-text
+// over a tertiary hover fill -- the brown ribbon ink vanishes on brown)
+#main-outlet a.discourse-tag.box:hover,
+#main-outlet a.discourse-tag.box:focus-visible {
+  color: var(--bm-tag-hover-ink, var(--bm-ribbon-text, #d4be9f));
+}
+
+// chat: channel navbar on the card step; composer bar floats (no border)
+.c-navbar-container {
+  background: var(--bm-chat-navbar-bg, var(--secondary));
+}
+.chat-composer__inner-container {
+  box-shadow: var(--bm-chat-composer-shadow, none);
 }
